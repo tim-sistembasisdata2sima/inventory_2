@@ -71,7 +71,6 @@ class Products extends Admin_Controller
 				$value['name'],
 				$value['price'],
                 $value['qty'] . ' ' . $qty_status,
-                $store_data['name'],
 				$availability,
 				$buttons
 			);
@@ -95,7 +94,6 @@ class Products extends Admin_Controller
 		$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
 		$this->form_validation->set_rules('price', 'Price', 'trim|required');
 		$this->form_validation->set_rules('qty', 'Qty', 'trim|required');
-        $this->form_validation->set_rules('store', 'Store', 'trim|required');
 		$this->form_validation->set_rules('availability', 'Availability', 'trim|required');
 		
 	
@@ -113,7 +111,6 @@ class Products extends Admin_Controller
         		'attribute_value_id' => json_encode($this->input->post('attributes_value_id')),
         		'brand_id' => json_encode($this->input->post('brands')),
         		'category_id' => json_encode($this->input->post('category')),
-                'store_id' => $this->input->post('store'),
         		'availability' => $this->input->post('availability'),
         	);
 
@@ -201,7 +198,6 @@ class Products extends Admin_Controller
         $this->form_validation->set_rules('sku', 'SKU', 'trim|required');
         $this->form_validation->set_rules('price', 'Price', 'trim|required');
         $this->form_validation->set_rules('qty', 'Qty', 'trim|required');
-        $this->form_validation->set_rules('store', 'Store', 'trim|required');
         $this->form_validation->set_rules('availability', 'Availability', 'trim|required');
 
         if ($this->form_validation->run() == TRUE) {
@@ -216,7 +212,6 @@ class Products extends Admin_Controller
                 'attribute_value_id' => json_encode($this->input->post('attributes_value_id')),
                 'brand_id' => json_encode($this->input->post('brands')),
                 'category_id' => json_encode($this->input->post('category')),
-                'store_id' => $this->input->post('store'),
                 'availability' => $this->input->post('availability'),
             );
 
