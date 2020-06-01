@@ -70,14 +70,6 @@
             </li>
           <?php endif; ?>
 
-          <?php if(in_array('createStore', $user_permission) || in_array('updateStore', $user_permission) || in_array('viewStore', $user_permission) || in_array('deleteStore', $user_permission)): ?>
-            <li id="storeNav">
-              <a href="<?php echo base_url('stores/') ?>">
-                <i class="fa fa-files-o"></i> <span>Stores</span>
-              </a>
-            </li>
-          <?php endif; ?>
-
           <?php if(in_array('createAttribute', $user_permission) || in_array('updateAttribute', $user_permission) || in_array('viewAttribute', $user_permission) || in_array('deleteAttribute', $user_permission)): ?>
           <li id="attributeNav">
             <a href="<?php echo base_url('attributes/') ?>">

@@ -15,7 +15,6 @@ class Products extends Admin_Controller
 		$this->load->model('model_products');
 		$this->load->model('model_brands');
 		$this->load->model('model_category');
-		$this->load->model('model_stores');
 		$this->load->model('model_attributes');
 	}
 
@@ -43,7 +42,6 @@ class Products extends Admin_Controller
 
 		foreach ($data as $key => $value) {
 
-            $store_data = $this->model_stores->getStoresData($value['store_id']);
 			// button
             $buttons = '';
             if(in_array('updateProduct', $this->permission)) {
@@ -147,7 +145,6 @@ class Products extends Admin_Controller
         	$this->data['attributes'] = $attributes_final_data;
 			$this->data['brands'] = $this->model_brands->getActiveBrands();        	
 			$this->data['category'] = $this->model_category->getActiveCategroy();        	
-			$this->data['stores'] = $this->model_stores->getActiveStore();        	
 
             $this->render_template('products/create', $this->data);
         }	
@@ -258,7 +255,6 @@ class Products extends Admin_Controller
             $this->data['attributes'] = $attributes_final_data;
             $this->data['brands'] = $this->model_brands->getActiveBrands();         
             $this->data['category'] = $this->model_category->getActiveCategroy();           
-            $this->data['stores'] = $this->model_stores->getActiveStore();          
 
             $product_data = $this->model_products->getProductData($product_id);
             $this->data['product_data'] = $product_data;
