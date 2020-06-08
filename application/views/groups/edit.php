@@ -182,6 +182,21 @@
                         } ?>></td>
                       </tr>
                       <tr>
+                        <td>Suppliers</td>
+                        <td><input type="checkbox" name="permission[]" id="permission" class="minimal" value="createSupplier" <?php if($serialize_permission) {
+                          if(in_array('createSupplier', $serialize_permission)) { echo "checked"; } 
+                        } ?>></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" class="minimal" value="updateSupplier" <?php if($serialize_permission) {
+                          if(in_array('updateSupplier', $serialize_permission)) { echo "checked"; } 
+                        } ?>></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" class="minimal" value="viewSupplier" <?php if($serialize_permission) {
+                          if(in_array('viewSupplier', $serialize_permission)) { echo "checked"; } 
+                        } ?>></td>
+                        <td><input type="checkbox" name="permission[]" id="permission" class="minimal" value="deleteSupplier" <?php if($serialize_permission) {
+                          if(in_array('deleteSupplier', $serialize_permission)) { echo "checked"; } 
+                        } ?>></td>
+                      </tr>
+                      <tr>
                         <td>Reports</td>
                         <td> - </td>
                         <td> - </td>
