@@ -87,20 +87,6 @@
                   </textarea>
                 </div>
 
-                <?php $attribute_id = json_decode($product_data['attribute_value_id']); ?>
-                <?php if($attributes): ?>
-                  <?php foreach ($attributes as $k => $v): ?>
-                    <div class="form-group">
-                      <label for="groups"><?php echo $v['attribute_data']['name'] ?></label>
-                      <select class="form-control select_group" id="attributes_value_id" name="attributes_value_id[]" multiple="multiple">
-                        <?php foreach ($v['attribute_value'] as $k2 => $v2): ?>
-                          <option value="<?php echo $v2['id'] ?>" <?php if(in_array($v2['id'], $attribute_id)) { echo "selected"; } ?>><?php echo $v2['value'] ?></option>
-                        <?php endforeach ?>
-                      </select>
-                    </div>    
-                  <?php endforeach ?>
-                <?php endif; ?>
-
                 <div class="form-group">
                   <label for="brands">Brands</label>
                   <?php $brand_data = json_decode($product_data['brand_id']); ?>
@@ -120,7 +106,16 @@
                     <?php endforeach ?>
                   </select>
                 </div>
-
+                
+                <div class="form-group">
+                  <label for="groups">Color Attribute</label>
+                  <?php $attribute_data = json_decode($product_data['attribute_value_id']); ?>
+                  <select class="form-control select_group" id="attributes_value_id" name="attributes_value_id[]" multiple="multiple">
+                    <?php foreach ($attributes as $k => $v): ?>
+                      <option value="<?php echo $v['id'] ?>"><?php if(in_array($v['id'], $attribute_data)) { echo "selected='selected'"; } ?> ><?php echo $v['name'] ?></option>
+                    <?php endforeach ?>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="store">Availability</label>
                   <select class="form-control" id="availability" name="availability">
@@ -128,9 +123,15 @@
                     <option value="2" <?php if($product_data['availability'] != 1) { echo "selected='selected'"; } ?>>No</option>
                   </select>
                 </div>
-
-
-
+                <div class="form-group">
+                  <label for="supplier">Supplier</label>
+                  <select class="form-control select_group" id="supplier" name="supplier">
+                    <?php foreach ($supplier as $k => $v): ?>
+                      <option value="<?php echo $v['id'] ?>" <?php if($product_data['supplier_id'] == $v['id']) { echo "selected='selected'"; } ?> ><?php echo $v['name'] ?></option>
+                    <?php endforeach ?>
+                  </select>
+                </div>
+                
               </div>
               <!-- /.box-body -->
 

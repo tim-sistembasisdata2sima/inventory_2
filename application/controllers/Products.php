@@ -42,6 +42,7 @@ class Products extends Admin_Controller
 
 		foreach ($data as $key => $value) {
 
+            $color_attribute = $this->model_attributes->getAttributeValueData($value['attribute_value_id']);
 			// button
             $buttons = '';
             if(in_array('updateProduct', $this->permission)) {
@@ -71,6 +72,7 @@ class Products extends Admin_Controller
 				$value['name'],
 				$value['price'],
                 $value['qty'] . ' ' . $qty_status,
+                $color_attribute['name'],
 				$availability,
 				$buttons
 			);
@@ -99,19 +101,23 @@ class Products extends Admin_Controller
 	
         if ($this->form_validation->run() == TRUE) {
             // true case
+            $user_id = $this->session->userdata('id');
         	$upload_image = $this->upload_image();
 
         	$data = array(
         		'name' => $this->input->post('product_name'),
         		'sku' => $this->input->post('sku'),
         		'price' => $this->input->post('price'),
-        		'qty' => $this->input->post('qty'),
+                'qty' => $this->input->post('qty'),
+                'discount' => $this->input->post('discount'),
         		'image' => $upload_image,
         		'description' => $this->input->post('description'),
         		'attribute_value_id' => json_encode($this->input->post('attributes_value_id')),
         		'brand_id' => json_encode($this->input->post('brands')),
         		'category_id' => json_encode($this->input->post('category')),
-        		'availability' => $this->input->post('availability'),
+                'availability' => $this->input->post('availability'),
+
+                'user_id' => $user_id
         	);
 
         	$create = $this->model_products->create($data);
@@ -128,18 +134,18 @@ class Products extends Admin_Controller
             // false case
 
         	// attributes 
-        	$attribute_data = $this->model_attributes->getActiveAttributeData();
+        	// $attribute_data = 
 
-        	$attributes_final_data = array();
-        	foreach ($attribute_data as $k => $v) {
-        		$attributes_final_data[$k]['attribute_data'] = $v;
+        	// $attributes_final_data = array();
+        	// foreach ($attribute_data as $k => $v) {
+        	// 	$attributes_final_data[$k]['attribute_data'] = $v;
 
-        		$value = $this->model_attributes->getAttributeValueData($v['id']);
+        	// 	$value = $this->model_attributes->getAttributeValueData($v['id']);
 
-        		$attributes_final_data[$k]['attribute_value'] = $value;
-        	}
+        	// 	$attributes_final_data[$k]['attribute_value'] = $value;
+        	// }
 
-        	$this->data['attributes'] = $attributes_final_data;
+        	$this->data['attributes'] =$this->model_attributes->getAttributeValueData();
 			$this->data['brands'] = $this->model_brands->getActiveBrands();        	
 			$this->data['category'] = $this->model_category->getActiveCategroy();        	
 
@@ -202,17 +208,20 @@ class Products extends Admin_Controller
 
         if ($this->form_validation->run() == TRUE) {
             // true case
-            
+            $user_id = $this->session->userdata('id');
+
             $data = array(
                 'name' => $this->input->post('product_name'),
                 'sku' => $this->input->post('sku'),
                 'price' => $this->input->post('price'),
+                'discount' => $this->input->post('discount'),
                 'qty' => $this->input->post('qty'),
                 'description' => $this->input->post('description'),
                 'attribute_value_id' => json_encode($this->input->post('attributes_value_id')),
                 'brand_id' => json_encode($this->input->post('brands')),
                 'category_id' => json_encode($this->input->post('category')),
                 'availability' => $this->input->post('availability'),
+	    		'user_id' => $user_id
             );
 
             
@@ -237,7 +246,8 @@ class Products extends Admin_Controller
             
             // false case
             $this->data['brands'] = $this->model_brands->getActiveBrands();         
-            $this->data['category'] = $this->model_category->getActiveCategroy();           
+            $this->data['category'] = $this->model_category->getActiveCategroy(); 
+            $this->data['attributes'] =$this->model_attributes->getAttributeValueData();          
 
             $product_data = $this->model_products->getProductData($product_id);
             $this->data['product_data'] = $product_data;

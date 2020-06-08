@@ -67,12 +67,15 @@
 
                 <div class="form-group">
                   <label for="price">Price</label>
-                  <input type="text" class="form-control" id="price" name="price" placeholder="Enter price" autocomplete="off" />
+                  <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" autocomplete="off" />
                 </div>
-
+                <div class="form-group">
+                    <label for="discount">Discount</label>
+                    <input type="number" class="form-control" id="discount" name="discount" placeholder="Discount" autocomplete="off">
+                </div>
                 <div class="form-group">
                   <label for="qty">Qty</label>
-                  <input type="text" class="form-control" id="qty" name="qty" placeholder="Enter Qty" autocomplete="off" />
+                  <input type="number" class="form-control" id="qty" name="qty" placeholder="Enter Qty" autocomplete="off" />
                 </div>
 
                 <div class="form-group">
@@ -81,19 +84,6 @@
                   description" autocomplete="off">
                   </textarea>
                 </div>
-
-                <?php if($attributes): ?>
-                  <?php foreach ($attributes as $k => $v): ?>
-                    <div class="form-group">
-                      <label for="groups"><?php echo $v['attribute_data']['name'] ?></label>
-                      <select class="form-control select_group" id="attributes_value_id" name="attributes_value_id[]" multiple="multiple">
-                        <?php foreach ($v['attribute_value'] as $k2 => $v2): ?>
-                          <option value="<?php echo $v2['id'] ?>"><?php echo $v2['value'] ?></option>
-                        <?php endforeach ?>
-                      </select>
-                    </div>    
-                  <?php endforeach ?>
-                <?php endif; ?>
 
                 <div class="form-group">
                   <label for="brands">Brands</label>
@@ -112,7 +102,15 @@
                     <?php endforeach ?>
                   </select>
                 </div>
-                
+
+                <div class="form-group">
+                  <label for="groups">Color Attribute</label>
+                  <select class="form-control select_group" id="attributes_value_id" name="attributes_value_id[]" multiple="multiple">
+                    <?php foreach ($attributes as $k => $v): ?>
+                      <option value="<?php echo $v['id'] ?>"><?php echo $v['value'] ?></option>
+                    <?php endforeach ?>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="store">Availability</label>
                   <select class="form-control" id="availability" name="availability">
@@ -120,6 +118,15 @@
                     <option value="2">No</option>
                   </select>
                 </div>
+                <div class="form-group">
+                  <label for="supplier">Supplier</label>
+                  <select class="form-control select_group" id="supplier" name="supplier">
+                    <?php foreach ($supplier as $k => $v): ?>
+                      <option value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
+                    <?php endforeach ?>
+                  </select>
+                </div>
+                
 
               </div>
               <!-- /.box-body -->
