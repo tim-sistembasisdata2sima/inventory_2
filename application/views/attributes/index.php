@@ -5,12 +5,12 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Manage
-      <small>Attributes</small>
+      Manage Color Attributes
+      <small>Value</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Attributes</li>
+      <li class="active"><a href="<?php echo base_url('attributes/') ?>">Attributes Value</a></li>
     </ol>
   </section>
 
@@ -39,18 +39,17 @@
           <br /> <br />
         <?php //endif; ?>
 
+
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Manage Attributes</h3>
+            <h3 class="box-title">Manage Attributes Value</h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
             <table id="manageTable" class="table table-bordered table-striped">
               <thead>
               <tr>
-                <th>Attribute Name</th>
-                <th>Total value</th>
-                <th>Status</th>
+                <th>Attribute Value</th>
                 <?php //if(in_array('updateGroup', $user_permission) || in_array('deleteGroup', $user_permission)): ?>
                   <th>Action</th>
                 <?php //endif; ?>
@@ -80,23 +79,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Add Attribute</h4>
+        <h4 class="modal-title">Add Attribute Value</h4>
       </div>
 
-      <form role="form" action="<?php echo base_url('attributes/create') ?>" method="post" id="createForm">
+      <form role="form" action="<?php echo base_url('attributes/createValue') ?>" method="post" id="createForm">
 
         <div class="modal-body">
-
           <div class="form-group">
-            <label for="brand_name">Attribute Name</label>
-            <input type="text" class="form-control" id="attribute_name" name="attribute_name" placeholder="Enter attribute name" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="active">Status</label>
-            <select class="form-control" id="active" name="active">
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-            </select>
+            <label for="brand_name">Attribute Value</label>
+            <input type="text" class="form-control" id="attribute_value_name" name="attribute_value_name" placeholder="Enter attribute value" autocomplete="off">
           </div>
         </div>
 
@@ -118,24 +109,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Store</h4>
+        <h4 class="modal-title">Edit Attribute Value</h4>
       </div>
 
-      <form role="form" action="<?php echo base_url('attributes/update') ?>" method="post" id="updateForm">
+      <form role="form" action="<?php echo base_url('attributes/updateValue') ?>" method="post" id="updateForm">
 
         <div class="modal-body">
           <div id="messages"></div>
 
           <div class="form-group">
-            <label for="edit_brand_name">Attribute Name</label>
-            <input type="text" class="form-control" id="edit_attribute_name" name="edit_attribute_name" placeholder="Enter attribute name" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="edit_active">Status</label>
-            <select class="form-control" id="edit_active" name="edit_active">
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-            </select>
+            <label for="edit_brand_name">Attribute Value</label>
+            <input type="text" class="form-control" id="edit_attribute_value_name" name="edit_attribute_value_name" placeholder="Enter attribute value" autocomplete="off">
           </div>
         </div>
 
@@ -157,10 +141,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Remove Attribute</h4>
+        <h4 class="modal-title">Remove Attribute Value</h4>
       </div>
 
-      <form role="form" action="<?php echo base_url('attributes/remove') ?>" method="post" id="removeForm">
+      <form role="form" action="<?php echo base_url('attributes/removeValue') ?>" method="post" id="removeForm">
         <div class="modal-body">
           <p>Do you really want to remove?</p>
         </div>
@@ -189,7 +173,7 @@ $(document).ready(function() {
 
   // initialize the datatable 
   manageTable = $('#manageTable').DataTable({
-    'ajax': base_url + 'attributes/fetchAttributeData',
+    'ajax': base_url+'attributes/fetchAttributeValue',
     'order': []
   });
 
@@ -253,16 +237,19 @@ $(document).ready(function() {
 });
 
 // edit function
+// id => attribute value id
 function editFunc(id)
 { 
+
   $.ajax({
-    url: 'fetchAttributeDataById/'+id,
+    url: base_url+'attributes/fetchAttributeValueById/'+id,
     type: 'post',
     dataType: 'json',
     success:function(response) {
 
-      $("#edit_attribute_name").val(response.name);
-      $("#edit_active").val(response.active);
+      console.log(response);
+
+      $("#edit_attribute_value_name").val(response.value);
 
       // submit the edit from 
       $("#updateForm").unbind('submit').bind('submit', function() {
@@ -337,7 +324,7 @@ function removeFunc(id)
       $.ajax({
         url: form.attr('action'),
         type: form.attr('method'),
-        data: { attribute_id:id }, 
+        data: { attribute_value_id:id }, 
         dataType: 'json',
         success:function(response) {
 

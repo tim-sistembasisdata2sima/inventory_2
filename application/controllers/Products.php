@@ -14,8 +14,8 @@ class Products extends Admin_Controller
 
 		$this->load->model('model_products');
 		$this->load->model('model_brands');
-		$this->load->model('model_category');
-		$this->load->model('model_attributes');
+        $this->load->model('model_category');
+        $this->load->model('model_attributes');
 	}
 
     /* 
@@ -234,20 +234,8 @@ class Products extends Admin_Controller
             }
         }
         else {
-            // attributes 
-            $attribute_data = $this->model_attributes->getActiveAttributeData();
-
-            $attributes_final_data = array();
-            foreach ($attribute_data as $k => $v) {
-                $attributes_final_data[$k]['attribute_data'] = $v;
-
-                $value = $this->model_attributes->getAttributeValueData($v['id']);
-
-                $attributes_final_data[$k]['attribute_value'] = $value;
-            }
             
             // false case
-            $this->data['attributes'] = $attributes_final_data;
             $this->data['brands'] = $this->model_brands->getActiveBrands();         
             $this->data['category'] = $this->model_category->getActiveCategroy();           
 
