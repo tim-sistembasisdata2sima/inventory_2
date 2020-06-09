@@ -58,6 +58,8 @@ class Suppliers extends Admin_Controller
 
 			$result['data'][$key] = array(
 				$value['name'],
+				$value['address'],
+				$value['phone'],
 				$status,
 				$buttons
 			);
@@ -103,7 +105,9 @@ class Suppliers extends Admin_Controller
 
         if ($this->form_validation->run() == TRUE) {
         	$data = array(
-        		'name' => $this->input->post('supplier_name'),
+				'name' => $this->input->post('supplier_name'),
+				'address' => $this->input->post('address'),
+				'phone' => $this->input->post('phone'),
         		'active' => $this->input->post('active'),	
         	);
 
@@ -149,7 +153,9 @@ class Suppliers extends Admin_Controller
 
 	        if ($this->form_validation->run() == TRUE) {
 	        	$data = array(
-	        		'name' => $this->input->post('edit_supplier_name'),
+					'name' => $this->input->post('edit_supplier_name'),
+					'address' => $this->input->post('edit_address'),
+					'phone' => $this->input->post('edit_phone'),
 	        		'active' => $this->input->post('edit_active'),	
 	        	);
 

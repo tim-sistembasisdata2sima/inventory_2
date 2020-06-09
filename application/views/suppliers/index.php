@@ -49,6 +49,8 @@
               <thead>
               <tr>
                 <th>Supplier Name</th>
+                <th>Address</th>
+                <th>Phone</th>
                 <th>Status</th>
                 <?php if(in_array('updateSupplier', $user_permission) || in_array('deleteSupplier', $user_permission)): ?>
                   <th>Action</th>
@@ -90,6 +92,17 @@
             <label for="supplier_name">Supplier Name</label>
             <input type="text" class="form-control" id="supplier_name" name="supplier_name" placeholder="Enter supplier name" autocomplete="off">
           </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="address" name="address" placeholder="Address" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" autocomplete="off">
+          </div>
+
           <div class="form-group">
             <label for="active">Status</label>
             <select class="form-control" id="active" name="active">
@@ -130,6 +143,14 @@
           <div class="form-group">
             <label for="edit_supplier_name">Supplier Name</label>
             <input type="text" class="form-control" id="edit_supplier_name" name="edit_supplier_name" placeholder="Enter supplier name" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" class="form-control" id="edit_address" name="edit_address" placeholder="Address" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" id="edit_phone" name="edit_phone" placeholder="Phone" autocomplete="off">
           </div>
           <div class="form-group">
             <label for="edit_active">Status</label>
@@ -263,7 +284,10 @@ function editSupplier(id)
     success:function(response) {
 
       $("#edit_supplier_name").val(response.name);
+      $("#edit_address").val(response.address);
+      $("#edit_phone").val(response.phone);
       $("#edit_active").val(response.active);
+      console.log(response);
 
       // submit the edit from 
       $("#updateSupplierForm").unbind('submit').bind('submit', function() {
@@ -292,7 +316,7 @@ function editSupplier(id)
               $("#editSupplierModal").modal('hide');
               // reset the form 
               $("#updateSupplierForm .form-group").removeClass('has-error').removeClass('has-success');
-
+             
             } else {
 
               if(response.messages instanceof Object) {
