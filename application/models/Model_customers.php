@@ -1,6 +1,6 @@
 <?php 
 
-class Model_suppliers extends CI_Model
+class Model_customers extends CI_Model
 {
 	public function __construct()
 	{
