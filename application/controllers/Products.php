@@ -16,6 +16,8 @@ class Products extends Admin_Controller
 		$this->load->model('model_brands');
         $this->load->model('model_category');
         $this->load->model('model_attributes');
+        $this->load->model('model_suppliers');
+        $this->load->model('model_users');
 	}
 
     /* 
@@ -42,7 +44,8 @@ class Products extends Admin_Controller
 
 		foreach ($data as $key => $value) {
 
-            $color_attribute = $this->model_attributes->getAttributeValueData($value['attribute_value_id']);
+            // $color_attribute = $this->model_attributes->getAttributeValueData($value['attribute_value_id']);
+            $supplier_data = $this->model_suppliers->getSupplierData($value['supplier_id']);
 			// button
             $buttons = '';
             if(in_array('updateProduct', $this->permission)) {
@@ -51,6 +54,9 @@ class Products extends Admin_Controller
 
             if(in_array('deleteProduct', $this->permission)) { 
     			$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
+            }
+            if(in_array('viewProduct', $this->permission)) {
+                $buttons .= '<a href="'.base_url('products/detail/'.$value['id']).'" class="btn btn-default">Detail</a>';
             }
 			
 
@@ -71,9 +77,11 @@ class Products extends Admin_Controller
 				$value['sku'],
 				$value['name'],
 				$value['price'],
+                $value['discount'],
                 $value['qty'] . ' ' . $qty_status,
-                $color_attribute['name'],
-				$availability,
+                json_decode($value['attribute_value']),
+                $availability,
+                $supplier_data['name'],
 				$buttons
 			);
 		} // /foreach
@@ -95,7 +103,8 @@ class Products extends Admin_Controller
 		$this->form_validation->set_rules('product_name', 'Product name', 'trim|required');
 		$this->form_validation->set_rules('sku', 'SKU', 'trim|required');
 		$this->form_validation->set_rules('price', 'Price', 'trim|required');
-		$this->form_validation->set_rules('qty', 'Qty', 'trim|required');
+        $this->form_validation->set_rules('qty', 'Qty', 'trim|required');
+        $this->form_validation->set_rules('supplier', 'Supplier', 'trim|required');
 		$this->form_validation->set_rules('availability', 'Availability', 'trim|required');
 		
 	
@@ -108,15 +117,15 @@ class Products extends Admin_Controller
         		'name' => $this->input->post('product_name'),
         		'sku' => $this->input->post('sku'),
         		'price' => $this->input->post('price'),
-                'qty' => $this->input->post('qty'),
                 'discount' => $this->input->post('discount'),
+                'qty' => $this->input->post('qty'),
         		'image' => $upload_image,
+        		'attribute_value' => json_encode($this->input->post('attribute_value')),
         		'description' => $this->input->post('description'),
-        		'attribute_value_id' => json_encode($this->input->post('attributes_value_id')),
-        		'brand_id' => json_encode($this->input->post('brands')),
-        		'category_id' => json_encode($this->input->post('category')),
+        		'brand_id' => $this->input->post('brands'),
+        		'category_id' => $this->input->post('category'),
                 'availability' => $this->input->post('availability'),
-
+                'supplier_id' => $this->input->post('supplier'),
                 'user_id' => $user_id
         	);
 
@@ -147,7 +156,8 @@ class Products extends Admin_Controller
 
         	$this->data['attributes'] =$this->model_attributes->getAttributeValueData();
 			$this->data['brands'] = $this->model_brands->getActiveBrands();        	
-			$this->data['category'] = $this->model_category->getActiveCategroy();        	
+            $this->data['category'] = $this->model_category->getActiveCategory();  
+            $this->data['suppliers'] = $this->model_suppliers->getActiveSuppliers();        	
 
             $this->render_template('products/create', $this->data);
         }	
@@ -204,7 +214,9 @@ class Products extends Admin_Controller
         $this->form_validation->set_rules('sku', 'SKU', 'trim|required');
         $this->form_validation->set_rules('price', 'Price', 'trim|required');
         $this->form_validation->set_rules('qty', 'Qty', 'trim|required');
+        $this->form_validation->set_rules('supplier', 'Supplier', 'trim|required');
         $this->form_validation->set_rules('availability', 'Availability', 'trim|required');
+        
 
         if ($this->form_validation->run() == TRUE) {
             // true case
@@ -217,10 +229,11 @@ class Products extends Admin_Controller
                 'discount' => $this->input->post('discount'),
                 'qty' => $this->input->post('qty'),
                 'description' => $this->input->post('description'),
-                'attribute_value_id' => json_encode($this->input->post('attributes_value_id')),
-                'brand_id' => json_encode($this->input->post('brands')),
-                'category_id' => json_encode($this->input->post('category')),
+                'attribute_value' => json_encode($this->input->post('attribute_value')),
+                'brand_id' => $this->input->post('brands'),
+                'category_id' => $this->input->post('category'),
                 'availability' => $this->input->post('availability'),
+                'supplier_id' => $this->input->post('supplier'),
 	    		'user_id' => $user_id
             );
 
@@ -246,8 +259,9 @@ class Products extends Admin_Controller
             
             // false case
             $this->data['brands'] = $this->model_brands->getActiveBrands();         
-            $this->data['category'] = $this->model_category->getActiveCategroy(); 
-            $this->data['attributes'] =$this->model_attributes->getAttributeValueData();          
+            $this->data['category'] = $this->model_category->getActiveCategory(); 
+            $this->data['attributes'] =$this->model_attributes->getAttributeValueData();
+            $this->data['suppliers'] = $this->model_suppliers->getActiveSuppliers();                 
 
             $product_data = $this->model_products->getProductData($product_id);
             $this->data['product_data'] = $product_data;
@@ -285,6 +299,47 @@ class Products extends Admin_Controller
         }
 
         echo json_encode($response);
-	}
+    }
+    public function detail($product_id){
+        if(!in_array('viewProduct', $this->permission)) {
+			redirect('dashboard', 'refresh');
+        }
+        if(!$product_id) {
+            redirect('products', 'refresh');
+        }
+        
+        
+        // $availability = ($value['availability'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
+
+        // $qty_status = '';
+        // if($product_data['qty'] <= 10) {
+        //     $qty_status = '<span class="label label-warning">Low !</span>';
+        // } else if($product_data['qty'] <= 0) {
+        //     $qty_status = '<span class="label label-danger">Out of stock !</span>';
+        // }
+        
+
+		$detail_data = $this->model_products->getProductData($product_id);
+        $this->data['detail_data'] = $detail_data;
+        
+        $attribute_data = $detail_data['attribute_value'];
+        $this->data['attribute_data'] = $attribute_data;
+
+        $brand_data = $this->model_brands->getBrandData($detail_data['brand_id']);
+        $this->data['brand_data'] = $brand_data;
+        
+        $category_data = $this->model_category->getCategoryData($detail_data['category_id']);
+        $this->data['category_data'] = $category_data;
+
+        $supplier_data = $this->model_suppliers->getSupplierData($detail_data['supplier_id']);
+        $this->data['supplier_data'] = $supplier_data;
+        
+        $user_id = $this->session->userdata('id');
+        $user_data = $this->model_users->getUserData($user_id);
+        $this->data['user_data'] = $user_data;
+        
+        $this->render_template('products/detail', $this->data);
+
+    }
 
 }

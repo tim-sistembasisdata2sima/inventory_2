@@ -87,7 +87,7 @@
 
                 <div class="form-group">
                   <label for="brands">Brands</label>
-                  <select class="form-control select_group" id="brands" name="brands[]" multiple="multiple">
+                  <select class="form-control select_group" id="brands" name="brands">
                     <?php foreach ($brands as $k => $v): ?>
                       <option value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
                     <?php endforeach ?>
@@ -96,7 +96,7 @@
 
                 <div class="form-group">
                   <label for="category">Category</label>
-                  <select class="form-control select_group" id="category" name="category[]" multiple="multiple">
+                  <select class="form-control select_group" id="category" name="category">
                     <?php foreach ($category as $k => $v): ?>
                       <option value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
                     <?php endforeach ?>
@@ -105,9 +105,9 @@
 
                 <div class="form-group">
                   <label for="groups">Color Attribute</label>
-                  <select class="form-control select_group" id="attributes_value_id" name="attributes_value_id[]" multiple="multiple">
+                  <select class="form-control select_group" id="attribute_value" name="attribute_value[]" multiple="multiple">
                     <?php foreach ($attributes as $k => $v): ?>
-                      <option value="<?php echo $v['id'] ?>"><?php echo $v['value'] ?></option>
+                      <option value="<?php echo $v['value'] ?>"><?php echo $v['value'] ?></option>
                     <?php endforeach ?>
                   </select>
                 </div>
@@ -121,7 +121,7 @@
                 <div class="form-group">
                   <label for="supplier">Supplier</label>
                   <select class="form-control select_group" id="supplier" name="supplier">
-                    <?php foreach ($supplier as $k => $v): ?>
+                    <?php foreach ($suppliers as $k => $v): ?>
                       <option value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
                     <?php endforeach ?>
                   </select>

@@ -7,7 +7,7 @@ class Model_products extends CI_Model
 		parent::__construct();
 	}
 
-	/* get the brand data */
+	/* get the product data */
 	public function getProductData($id = null)
 	{
 		if($id) {

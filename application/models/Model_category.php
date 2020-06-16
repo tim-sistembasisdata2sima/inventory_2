@@ -8,7 +8,7 @@ class Model_category extends CI_Model
 	}
 
 	/* get active brand infromation */
-	public function getActiveCategroy()
+	public function getActiveCategory()
 	{
 		$sql = "SELECT * FROM categories WHERE active = ?";
 		$query = $this->db->query($sql, array(1));
