@@ -20,11 +20,11 @@ class Customers extends Admin_Controller
 	*/
 	public function index()
 	{
-		if(!in_array('viewSupplier', $this->permission)) {
+		if(!in_array('viewCustomer', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
-		$result = $this->model_customers->getSupplierData();
+		$result = $this->model_customers->getCustomerData();
 
 		$this->data['results'] = $result;
 
@@ -32,25 +32,25 @@ class Customers extends Admin_Controller
 	}
 
 	/*
-	* Fetches the supplier data from the supplier table 
+	* Fetches the customer data from the customer table 
 	* this function is called from the datatable ajax function
 	*/
-	public function fetchSupplierData()
+	public function fetchCustomerData()
 	{
 		$result = array('data' => array());
 
-		$data = $this->model_customers->getSupplierData();
+		$data = $this->model_customers->getCustomerData();
 		foreach ($data as $key => $value) {
 
 			// button
 			$buttons = '';
 
-			if(in_array('viewSupplier', $this->permission)) {
-				$buttons .= '<button type="button" class="btn btn-default" onclick="editSupplier('.$value['id'].')" data-toggle="modal" data-target="#editSupplierModal"><i class="fa fa-pencil"></i></button>';	
+			if(in_array('viewCustomer', $this->permission)) {
+				$buttons .= '<button type="button" class="btn btn-default" onclick="editCustomer('.$value['id'].')" data-toggle="modal" data-target="#editCustomerModal"><i class="fa fa-pencil"></i></button>';	
 			}
 			
-			if(in_array('deleteSupplier', $this->permission)) {
-				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeSupplier('.$value['id'].')" data-toggle="modal" data-target="#removeSupplierModal"><i class="fa fa-trash"></i></button>
+			if(in_array('deleteCustomer', $this->permission)) {
+				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeCustomer('.$value['id'].')" data-toggle="modal" data-target="#removeCustomerModal"><i class="fa fa-trash"></i></button>
 				';
 			}				
 
@@ -69,15 +69,15 @@ class Customers extends Admin_Controller
 	}
 
 	/*
-	* It checks if it gets the supplier id and retreives
-	* the supplier information from the supplier model and 
+	* It checks if it gets the customer id and retreives
+	* the customer information from the customer model and 
 	* returns the data into json format. 
 	* This function is invoked from the view page.
 	*/
-	public function fetchSupplierDataById($id)
+	public function fetchCustomerDataById($id)
 	{
 		if($id) {
-			$data = $this->model_customers->getSupplierData($id);
+			$data = $this->model_customers->getCustomerData($id);
 			echo json_encode($data);
 		}
 
@@ -85,27 +85,27 @@ class Customers extends Admin_Controller
 	}
 
 	/*
-	* Its checks the supplier form validation 
+	* Its checks the customer form validation 
 	* and if the validation is successfully then it inserts the data into the database 
 	* and returns the json format operation messages
 	*/
 	public function create()
 	{
 
-		if(!in_array('createSupplier', $this->permission)) {
+		if(!in_array('createCustomer', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
 		$response = array();
 
-		$this->form_validation->set_rules('supplier_name', 'Supplier name', 'trim|required');
+		$this->form_validation->set_rules('customer_name', 'customer name', 'trim|required');
 		$this->form_validation->set_rules('active', 'Active', 'trim|required');
 
 		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
         if ($this->form_validation->run() == TRUE) {
         	$data = array(
-				'name' => $this->input->post('supplier_name'),
+				'name' => $this->input->post('customer_name'),
 				'address' => $this->input->post('address'),
 				'phone' => $this->input->post('phone'),
         		'active' => $this->input->post('active'),	
@@ -118,7 +118,7 @@ class Customers extends Admin_Controller
         	}
         	else {
         		$response['success'] = false;
-        		$response['messages'] = 'Error in the database while creating the supplier information';			
+        		$response['messages'] = 'Error in the database while creating the customer information';			
         	}
         }
         else {
@@ -133,27 +133,27 @@ class Customers extends Admin_Controller
 	}
 
 	/*
-	* Its checks the supplier form validation 
+	* Its checks the customer form validation 
 	* and if the validation is successfully then it updates the data into the database 
 	* and returns the json format operation messages
 	*/
 	public function update($id)
 	{
-		if(!in_array('updateSupplier', $this->permission)) {
+		if(!in_array('updateCustomer', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
 		$response = array();
 
 		if($id) {
-			$this->form_validation->set_rules('edit_supplier_name', 'Supplier name', 'trim|required');
+			$this->form_validation->set_rules('edit_customer_name', 'Customer name', 'trim|required');
 			$this->form_validation->set_rules('edit_active', 'Active', 'trim|required');
 
 			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
 	        if ($this->form_validation->run() == TRUE) {
 	        	$data = array(
-					'name' => $this->input->post('edit_supplier_name'),
+					'name' => $this->input->post('edit_customer_name'),
 					'address' => $this->input->post('edit_address'),
 					'phone' => $this->input->post('edit_phone'),
 	        		'active' => $this->input->post('edit_active'),	
@@ -166,7 +166,7 @@ class Customers extends Admin_Controller
 	        	}
 	        	else {
 	        		$response['success'] = false;
-	        		$response['messages'] = 'Error in the database while updated the supplier information';			
+	        		$response['messages'] = 'Error in the database while updated the customer information';			
 	        	}
 	        }
 	        else {
@@ -185,19 +185,19 @@ class Customers extends Admin_Controller
 	}
 
 	/*
-	* It removes the supplier information from the database 
+	* It removes the customer information from the database 
 	* and returns the json format operation messages
 	*/
 	public function remove()
 	{
-		if(!in_array('deleteSupplier', $this->permission)) {
+		if(!in_array('deleteCustomer', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 		
-		$supplier_id = $this->input->post('supplier_id');
+		$customer_id = $this->input->post('customer_id');
 		$response = array();
-		if($supplier_id) {
-			$delete = $this->model_customers->remove($supplier_id);
+		if($customer_id) {
+			$delete = $this->model_customers->remove($customer_id);
 
 			if($delete == true) {
 				$response['success'] = true;
@@ -205,7 +205,7 @@ class Customers extends Admin_Controller
 			}
 			else {
 				$response['success'] = false;
-				$response['messages'] = "Error in the database while removing the supplier information";
+				$response['messages'] = "Error in the database while removing the customer information";
 			}
 		}
 		else {

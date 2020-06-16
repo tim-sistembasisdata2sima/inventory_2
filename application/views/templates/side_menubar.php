@@ -118,6 +118,14 @@
               </ul>
             </li>
           <?php endif; ?>
+
+          <?php if(in_array('createCustomer', $user_permission) || in_array('updateCustomer', $user_permission) || in_array('viewCustomer', $user_permission) || in_array('deleteCustomer', $user_permission)): ?>
+            <li id="customerNav">
+              <a href="<?php echo base_url('customers/') ?>">
+                <i class="glyphicon glyphicon-tags"></i> <span>Customers</span>
+              </a>
+            </li>
+          <?php endif; ?>
           
           <?php if(in_array('createSupplier', $user_permission) || in_array('updateSupplier', $user_permission) || in_array('viewSupplier', $user_permission) || in_array('deleteSupplier', $user_permission)): ?>
             <li id="supplierNav">
