@@ -45,7 +45,15 @@
                 </tr>
                 <tr>
                   <th>Quantity</th>
-                  <td><?php echo $detail_data['qty']; ?></td>
+                  <?php 
+                    $qty_status = '';
+                    if($detail_data['qty'] <= 10) {
+                        $qty_status = '<span class="label label-warning">Low !</span>';
+                    } else if($detail_data['qty'] <= 0) {
+                        $qty_status = '<span class="label label-danger">Out of stock !</span>';
+                    }
+                  ?>
+                  <td><?php echo $detail_data['qty']; ?> <?php echo $qty_status; ?></td>
                 </tr>
                 <tr>
                   <th>Color</th>

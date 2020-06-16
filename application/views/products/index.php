@@ -52,11 +52,8 @@
                 <th>SKU</th>
                 <th>Product Name</th>
                 <th>Price</th>
-                <th>Discount</th>
                 <th>Qty</th>
-                <th>Color Attribute</th>
                 <th>Availability</th>
-                <th>Supplier</th>
                 <?php if(in_array('updateProduct', $user_permission) || in_array('deleteProduct', $user_permission)): ?>
                   <th>Action</th>
                 <?php endif; ?>

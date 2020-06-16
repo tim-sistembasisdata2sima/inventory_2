@@ -73,7 +73,10 @@
                   <label for="price">Price</label>
                   <input type="text" class="form-control" id="price" name="price" placeholder="Enter price" value="<?php echo $product_data['price']; ?>" autocomplete="off" />
                 </div>
-
+                <div class="form-group">
+                    <label for="discount">Discount</label>
+                    <input type="number" class="form-control" id="discount" name="discount" placeholder="Discount" value="<?php echo $product_data['discount']; ?>" autocomplete="off">
+                </div>
                 <div class="form-group">
                   <label for="qty">Qty</label>
                   <input type="text" class="form-control" id="qty" name="qty" placeholder="Enter Qty" value="<?php echo $product_data['qty']; ?>" autocomplete="off" />

@@ -71,17 +71,19 @@ class Products extends Admin_Controller
                 $qty_status = '<span class="label label-danger">Out of stock !</span>';
             }
 
-
+            if($value['discount'] > 0){
+                $promo_status ='<span class="label label-danger">Promo</span>';
+            }else{
+                $promo_status='';
+            }
+            $promo_price = $value['price'] - $value['discount'];
 			$result['data'][$key] = array(
 				$img,
 				$value['sku'],
 				$value['name'],
-				$value['price'],
-                $value['discount'],
+				$promo_price . ' ' . $promo_status,
                 $value['qty'] . ' ' . $qty_status,
-                json_decode($value['attribute_value']),
                 $availability,
-                $supplier_data['name'],
 				$buttons
 			);
 		} // /foreach
