@@ -48,7 +48,8 @@
             <table id="manageTable" class="table table-bordered table-striped">
               <thead>
               <tr>
-                <th>Customer Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Address</th>
                 <th>Phone</th>
                 <?php if(in_array('updateCustomer', $user_permission) || in_array('deleteCustomer', $user_permission)): ?>
@@ -88,8 +89,13 @@
         <div class="modal-body">
 
           <div class="form-group">
-            <label for="customer_name">Customer Name</label>
-            <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" autocomplete="off">
+            <label for="customer_first_name">Customer First Name</label>
+            <input type="text" class="form-control" id="customer_first_name" name="customer_first_name" placeholder="Enter customer first name" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="customer_last_name">Customer Last Name</label>
+            <input type="text" class="form-control" id="customer_last_name" name="customer_last_name" placeholder="Enter customer last name" autocomplete="off">
           </div>
 
           <div class="form-group">
@@ -100,14 +106,6 @@
           <div class="form-group">
             <label for="phone">Phone</label>
             <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" autocomplete="off">
-          </div>
-
-          <div class="form-group">
-            <label for="active">Status</label>
-            <select class="form-control" id="active" name="active">
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-            </select>
           </div>
         </div>
 
@@ -140,8 +138,12 @@
           <div id="messages"></div>
 
           <div class="form-group">
-            <label for="edit_customer_name">Customer Name</label>
-            <input type="text" class="form-control" id="edit_customer_name" name="edit_customer_name" placeholder="Enter customer name" autocomplete="off">
+            <label for="edit_customer_first_name">Customer First Name</label>
+            <input type="text" class="form-control" id="edit_customer_first_name" name="edit_customer_first_name" placeholder="Enter customer first name" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="edit_customer_last_name">Customer Last Name</label>
+            <input type="text" class="form-control" id="edit_customer_last_name" name="edit_customer_last_name" placeholder="Enter customer last name" autocomplete="off">
           </div>
           <div class="form-group">
             <label for="address">Address</label>
@@ -150,13 +152,6 @@
           <div class="form-group">
             <label for="phone">Phone</label>
             <input type="text" class="form-control" id="edit_phone" name="edit_phone" placeholder="Phone" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="edit_active">Status</label>
-            <select class="form-control" id="edit_active" name="edit_active">
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-            </select>
           </div>
         </div>
 
@@ -206,7 +201,7 @@ var manageTable;
 
 $(document).ready(function() {
 
-  $("#customerrNav").addClass('active');
+  $("#customerNav").addClass('active');
 
   // initialize the datatable 
   manageTable = $('#manageTable').DataTable({

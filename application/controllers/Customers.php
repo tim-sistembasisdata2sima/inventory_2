@@ -54,13 +54,11 @@ class Customers extends Admin_Controller
 				';
 			}				
 
-			$status = ($value['active'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
-
 			$result['data'][$key] = array(
-				$value['name'],
+				$value['firstname'],
+				$value['lastname'],
 				$value['address'],
 				$value['phone'],
-				$status,
 				$buttons
 			);
 		} // /foreach
@@ -98,17 +96,17 @@ class Customers extends Admin_Controller
 
 		$response = array();
 
-		$this->form_validation->set_rules('customer_name', 'customer name', 'trim|required');
-		$this->form_validation->set_rules('active', 'Active', 'trim|required');
+		$this->form_validation->set_rules('customer_first_name', 'customer first name', 'trim|required');
+		$this->form_validation->set_rules('customer_last_name', 'customer last name', 'trim|required');
 
 		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
         if ($this->form_validation->run() == TRUE) {
         	$data = array(
-				'name' => $this->input->post('customer_name'),
+				'firstname' => $this->input->post('customer_first_name'),
+				'lastname' => $this->input->post('customer_last_name'),
 				'address' => $this->input->post('address'),
 				'phone' => $this->input->post('phone'),
-        		'active' => $this->input->post('active'),	
         	);
 
         	$create = $this->model_customers->create($data);
@@ -146,17 +144,17 @@ class Customers extends Admin_Controller
 		$response = array();
 
 		if($id) {
-			$this->form_validation->set_rules('edit_customer_name', 'Customer name', 'trim|required');
-			$this->form_validation->set_rules('edit_active', 'Active', 'trim|required');
+			$this->form_validation->set_rules('edit_customer_first_name', 'Customer first name', 'trim|required');
+			$this->form_validation->set_rules('edit_customer_last_name', 'Customer last name', 'trim|required');
 
 			$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
 	        if ($this->form_validation->run() == TRUE) {
 	        	$data = array(
-					'name' => $this->input->post('edit_customer_name'),
+					'firstname' => $this->input->post('edit_customer_first_name'),
+					'lastname' => $this->input->post('edit_customer_last_name'),
 					'address' => $this->input->post('edit_address'),
 					'phone' => $this->input->post('edit_phone'),
-	        		'active' => $this->input->post('edit_active'),	
 	        	);
 
 	        	$update = $this->model_customers->update($data, $id);
