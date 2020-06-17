@@ -55,4 +55,11 @@ class Model_suppliers extends CI_Model
 		}
 	}
 
+	public function countTotalSuppliers()
+	{
+		$sql = "SELECT * FROM suppliers WHERE active = ?";
+		$query = $this->db->query($sql, array(1));
+		return $query->num_rows();
+	}
+
 }
