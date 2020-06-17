@@ -32,24 +32,38 @@ class Model_orders extends CI_Model
 		$query = $this->db->query($sql, array($order_id));
 		return $query->result_array();
 	}
+	public function getOrderCustomerData($customer_id = null)
+	{
+		if(!$customer_id) {
+			return false;
+		}
+
+		$sql = "SELECT * FROM customers WHERE customer_id = ?";
+		$query = $this->db->query($sql, array($customer_id));
+		return $query->result_array();
+	}
 
 	public function create()
 	{
 		$user_id = $this->session->userdata('id');
+		$this->load->model('model_customers');
+		$customer = array (
+			'firstname' => $this->input->post('customer_first_name'),
+			'lastname' => $this->input->post('customer_last_name'),
+    		'address' => $this->input->post('customer_address'),
+    		'phone' => $this->input->post('customer_phone'),
+		);
+		$insert_customer = $this->db->insert('customers',$customer);
+		$customer_id = $this->db->insert_id();
+
 		$bill_no = 'BILPR-'.strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 4));
     	$data = array(
     		'bill_no' => $bill_no,
-    		'customer_name' => $this->input->post('customer_name'),
-    		'customer_address' => $this->input->post('customer_address'),
-    		'customer_phone' => $this->input->post('customer_phone'),
-    		'date_time' => strtotime(date('Y-m-d h:i:s a')),
+    		'customer_id' => $customer_id,
+			// 'ordered_at' => date('Y-m-d h:i:s a'),
     		'gross_amount' => $this->input->post('gross_amount_value'),
-    		'service_charge_rate' => $this->input->post('service_charge_rate'),
-    		'service_charge' => ($this->input->post('service_charge_value') > 0) ?$this->input->post('service_charge_value'):0,
-    		'vat_charge_rate' => $this->input->post('vat_charge_rate'),
-    		'vat_charge' => ($this->input->post('vat_charge_value') > 0) ? $this->input->post('vat_charge_value') : 0,
     		'net_amount' => $this->input->post('net_amount_value'),
-    		'discount' => $this->input->post('discount'),
+    		'total_discount' => $this->input->post('discount'),
     		'paid_status' => 2,
     		'user_id' => $user_id
     	);
@@ -100,16 +114,9 @@ class Model_orders extends CI_Model
 			// fetch the order data 
 
 			$data = array(
-				'customer_name' => $this->input->post('customer_name'),
-	    		'customer_address' => $this->input->post('customer_address'),
-	    		'customer_phone' => $this->input->post('customer_phone'),
 	    		'gross_amount' => $this->input->post('gross_amount_value'),
-	    		'service_charge_rate' => $this->input->post('service_charge_rate'),
-	    		'service_charge' => ($this->input->post('service_charge_value') > 0) ? $this->input->post('service_charge_value'):0,
-	    		'vat_charge_rate' => $this->input->post('vat_charge_rate'),
-	    		'vat_charge' => ($this->input->post('vat_charge_value') > 0) ? $this->input->post('vat_charge_value') : 0,
 	    		'net_amount' => $this->input->post('net_amount_value'),
-	    		'discount' => $this->input->post('discount'),
+	    		'total_discount' => $this->input->post('discount'),
 	    		'paid_status' => $this->input->post('paid_status'),
 	    		'user_id' => $user_id
 	    	);

@@ -14,7 +14,7 @@ class Orders extends Admin_Controller
 
 		$this->load->model('model_orders');
 		$this->load->model('model_products');
-		$this->load->model('model_company');
+		$this->load->model('model_customers');
 	}
 
 	/* 
@@ -39,14 +39,15 @@ class Orders extends Admin_Controller
 		$result = array('data' => array());
 
 		$data = $this->model_orders->getOrdersData();
-
+		
 		foreach ($data as $key => $value) {
+			$customers_data = $this->model_customers->getCustomerData($value['customer_id']);
 
 			$count_total_item = $this->model_orders->countOrderItem($value['id']);
-			$date = date('d-m-Y', $value['date_time']);
-			$time = date('h:i a', $value['date_time']);
+			// $date = date('d-m-Y', $value['ordered_at']);
+			// $time = date('h:i:s a', $value['ordered_at']);
 
-			$date_time = $date . ' ' . $time;
+			// $date_time = $date . ' ' . $time;
 
 			// button
 			$buttons = '';
@@ -72,9 +73,10 @@ class Orders extends Admin_Controller
 
 			$result['data'][$key] = array(
 				$value['bill_no'],
-				$value['customer_name'],
-				$value['customer_phone'],
-				$date_time,
+				$customers_data['firstname'],
+				$customers_data['lastname'],
+				$customers_data['phone'],
+				$value['ordered_at'],
 				$count_total_item,
 				$value['net_amount'],
 				$paid_status,
@@ -116,11 +118,6 @@ class Orders extends Admin_Controller
         }
         else {
             // false case
-        	$company = $this->model_company->getCompanyData(1);
-        	$this->data['company_data'] = $company;
-        	$this->data['is_vat_enabled'] = ($company['vat_charge_value'] > 0) ? true : false;
-        	$this->data['is_service_enabled'] = ($company['service_charge_value'] > 0) ? true : false;
-
         	$this->data['products'] = $this->model_products->getActiveProductData();      	
 
             $this->render_template('orders/create', $this->data);
@@ -187,25 +184,23 @@ class Orders extends Admin_Controller
         }
         else {
             // false case
-        	$company = $this->model_company->getCompanyData(1);
-        	$this->data['company_data'] = $company;
-        	$this->data['is_vat_enabled'] = ($company['vat_charge_value'] > 0) ? true : false;
-        	$this->data['is_service_enabled'] = ($company['service_charge_value'] > 0) ? true : false;
 
         	$result = array();
         	$orders_data = $this->model_orders->getOrdersData($id);
 
     		$result['order'] = $orders_data;
-    		$orders_item = $this->model_orders->getOrdersItemData($orders_data['id']);
+			$orders_item = $this->model_orders->getOrdersItemData($orders_data['id']);
 
     		foreach($orders_item as $k => $v) {
     			$result['order_item'][] = $v;
     		}
 
     		$this->data['order_data'] = $result;
-
+			
+			$this->data['customer'] = $this->model_customers->getCustomerData($orders_data['customer_id']);      	
+			
         	$this->data['products'] = $this->model_products->getActiveProductData();      	
-
+			
             $this->render_template('orders/edit', $this->data);
         }
 	}
@@ -255,9 +250,12 @@ class Orders extends Admin_Controller
 		if($id) {
 			$order_data = $this->model_orders->getOrdersData($id);
 			$orders_items = $this->model_orders->getOrdersItemData($id);
-			$company_info = $this->model_company->getCompanyData(1);
+			$customer = $this->model_customers->getCustomerData($order_data['customer_id']);
 
-			$order_date = date('d/m/Y', $order_data['date_time']);
+			$this->load->model('model_users');
+			$user = $this->model_users->getUserData($order_data['user_id']);
+
+			$order_date = ($order_data['paid_status'] == 1) ? $order_data['paid_at'] : $order_data['ordered_at'];
 			$paid_status = ($order_data['paid_status'] == 1) ? "Paid" : "Unpaid";
 
 			$html = '<!-- Main content -->
@@ -283,22 +281,42 @@ class Orders extends Admin_Controller
 			    <div class="row">
 			      <div class="col-xs-12">
 			        <h2 class="page-header">
-			          '.$company_info['company_name'].'
-			          <small class="pull-right">Date: '.$order_date.'</small>
+			          nama tokonya
+					  <small class="pull-right">Date: '.$order_date.' '.$user['firstname'].' '.$user['lastname'].'</small>
 			        </h2>
 			      </div>
 			      <!-- /.col -->
 			    </div>
 			    <!-- info row -->
-			    <div class="row invoice-info">
+			    <div class="invoice-info">
 			      
-			      <div class="col-sm-4 invoice-col">
-			        
-			        <b>Bill ID:</b> '.$order_data['bill_no'].'<br>
-			        <b>Name:</b> '.$order_data['customer_name'].'<br>
-			        <b>Address:</b> '.$order_data['customer_address'].' <br />
-			        <b>Phone:</b> '.$order_data['customer_phone'].'
-			      </div>
+			      <table class="invoice-col">
+					<tr>
+						<th><b>Bill ID</b></th>
+						<td><b>:</b></td>
+						<td>'.$order_data['bill_no'].'</td>
+					</tr>
+					<tr>
+						<th><b>First Name</b></th>
+						<td><b>:</b></td>
+						<td>'.$customer['firstname'].'</td>
+					</tr>
+					<tr>
+						<th><b>Last Name</b></th>
+						<td><b>:</b></td>
+						<td>'.$customer['lastname'].'</td>
+					</tr>
+					<tr>
+						<th><b>Address</b></th>
+						<td><b>:</b></td>
+						<td>'.$customer['address'].'</td>
+					</tr>
+					<tr>
+						<th><b>Phone</b></th>
+						<td><b>:</b></td>
+						<td>'.$customer['phone'].'</td>
+					</tr>
+			      </table>
 			      <!-- /.col -->
 			    </div>
 			    <!-- /.row -->
@@ -346,25 +364,10 @@ class Orders extends Admin_Controller
 			              <th style="width:50%">Gross Amount:</th>
 			              <td>'.$order_data['gross_amount'].'</td>
 			            </tr>';
-
-			            if($order_data['service_charge'] > 0) {
-			            	$html .= '<tr>
-				              <th>Service Charge ('.$order_data['service_charge_rate'].'%)</th>
-				              <td>'.$order_data['service_charge'].'</td>
-				            </tr>';
-			            }
-
-			            if($order_data['vat_charge'] > 0) {
-			            	$html .= '<tr>
-				              <th>Vat Charge ('.$order_data['vat_charge_rate'].'%)</th>
-				              <td>'.$order_data['vat_charge'].'</td>
-				            </tr>';
-			            }
-			            
 			            
 			            $html .=' <tr>
 			              <th>Discount:</th>
-			              <td>'.$order_data['discount'].'</td>
+			              <td>'.$order_data['total_discount'].'</td>
 			            </tr>
 			            <tr>
 			              <th>Net Amount:</th>

@@ -55,23 +55,29 @@
                 <div class="col-md-4 col-xs-12 pull pull-left">
 
                   <div class="form-group">
-                    <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Name</label>
+                    <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer First Name</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter Customer Name" value="<?php echo $order_data['order']['customer_name'] ?>" autocomplete="off"/>
+                      <input type="text" class="form-control" id="customer_first_name" name="customer_first_name" placeholder="Enter Customer Name" disabled value="<?php echo $customer['firstname'] ?>" autocomplete="off"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Last Name</label>
+                    <div class="col-sm-7">
+                      <input type="text" class="form-control" id="customer_last_name" name="customer_last_name" placeholder="Enter Last Customer Name" disabled value="<?php echo $customer['lastname'] ?>" autocomplete="off"/>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Address</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_address" name="customer_address" placeholder="Enter Customer Address" value="<?php echo $order_data['order']['customer_address'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="customer_address" name="customer_address" placeholder="Enter Customer Address" disabled value="<?php echo $customer['address'] ?>" autocomplete="off">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Phone</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_phone" name="customer_phone" placeholder="Enter Customer Phone" value="<?php echo $order_data['order']['customer_phone'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="customer_phone" name="customer_phone" placeholder="Enter Customer Phone" disabled value="<?php echo $customer['phone'] ?>" autocomplete="off">
                     </div>
                   </div>
                 </div>
@@ -132,28 +138,10 @@
                       <input type="hidden" class="form-control" id="gross_amount_value" name="gross_amount_value" value="<?php echo $order_data['order']['gross_amount'] ?>" autocomplete="off">
                     </div>
                   </div>
-                  <?php if($is_service_enabled == true): ?>
-                  <div class="form-group">
-                    <label for="service_charge" class="col-sm-5 control-label">S-Charge <?php echo $company_data['service_charge_value'] ?> %</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="form-control" id="service_charge" name="service_charge" disabled value="<?php echo $order_data['order']['service_charge'] ?>" autocomplete="off">
-                      <input type="hidden" class="form-control" id="service_charge_value" name="service_charge_value" value="<?php echo $order_data['order']['service_charge'] ?>" autocomplete="off">
-                    </div>
-                  </div>
-                  <?php endif; ?>
-                  <?php if($is_vat_enabled == true): ?>
-                  <div class="form-group">
-                    <label for="vat_charge" class="col-sm-5 control-label">Vat <?php echo $company_data['vat_charge_value'] ?> %</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="form-control" id="vat_charge" name="vat_charge" disabled value="<?php echo $order_data['order']['vat_charge'] ?>" autocomplete="off">
-                      <input type="hidden" class="form-control" id="vat_charge_value" name="vat_charge_value" value="<?php echo $order_data['order']['vat_charge'] ?>" autocomplete="off">
-                    </div>
-                  </div>
-                  <?php endif; ?>
                   <div class="form-group">
                     <label for="discount" class="col-sm-5 control-label">Discount</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount" onkeyup="subAmount()" value="<?php echo $order_data['order']['discount'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount" onkeyup="subAmount()" value="<?php echo $order_data['order']['total_discount'] ?>" autocomplete="off">
                     </div>
                   </div>
                   <div class="form-group">
@@ -179,9 +167,6 @@
               <!-- /.box-body -->
 
               <div class="box-footer">
-
-                <input type="hidden" name="service_charge_rate" value="<?php echo $company_data['service_charge_value'] ?>" autocomplete="off">
-                <input type="hidden" name="vat_charge_rate" value="<?php echo $company_data['vat_charge_value'] ?>" autocomplete="off">
 
                 <a target="__blank" href="<?php echo base_url() . 'orders/printDiv/'.$order_data['order']['id'] ?>" class="btn btn-default" >Print</a>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -338,9 +323,6 @@
 
   // calculate the total amount of the order
   function subAmount() {
-    var service_charge = <?php echo ($company_data['service_charge_value'] > 0) ? $company_data['service_charge_value']:0; ?>;
-    var vat_charge = <?php echo ($company_data['vat_charge_value'] > 0) ? $company_data['vat_charge_value']:0; ?>;
-
     var tableProductLength = $("#product_info_table tbody tr").length;
     var totalSubAmount = 0;
     for(x = 0; x < tableProductLength; x++) {
@@ -356,21 +338,9 @@
     // sub total
     $("#gross_amount").val(totalSubAmount);
     $("#gross_amount_value").val(totalSubAmount);
-
-    // vat
-    var vat = (Number($("#gross_amount").val())/100) * vat_charge;
-    vat = vat.toFixed(2);
-    $("#vat_charge").val(vat);
-    $("#vat_charge_value").val(vat);
-
-    // service
-    var service = (Number($("#gross_amount").val())/100) * service_charge;
-    service = service.toFixed(2);
-    $("#service_charge").val(service);
-    $("#service_charge_value").val(service);
     
     // total amount
-    var totalAmount = (Number(totalSubAmount) + Number(vat) + Number(service));
+    var totalAmount = (Number(totalSubAmount));
     totalAmount = totalAmount.toFixed(2);
     // $("#net_amount").val(totalAmount);
     // $("#totalAmountValue").val(totalAmount);

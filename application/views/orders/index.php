@@ -49,9 +49,10 @@
               <thead>
               <tr>
                 <th>Bill no</th>
-                <th>Customer Name</th>
+                <th>Customer First Name</th>
+                <th>Customer Last Name</th>
                 <th>Customer Phone</th>
-                <th>Date Time</th>
+                <th>Ordered Time</th>
                 <th>Total Products</th>
                 <th>Total Amount</th>
                 <th>Paid status</th>
@@ -139,8 +140,7 @@ function removeFunc(id)
         data: { order_id:id }, 
         dataType: 'json',
         success:function(response) {
-
-          manageTable.ajax.reload(null, false); 
+          manageTable.ajax.reload(null, false);
 
           if(response.success === true) {
             $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">'+
