@@ -22,7 +22,7 @@ class Model_reports extends CI_Model
 		
 		$return_data = array();
 		foreach ($result as $k => $v) {
-			$date = date('Y', $v['date_time']);
+			$date = date('Y', $v['paid_at']);
 			$return_data[] = $date;
 		}
 
@@ -47,7 +47,7 @@ class Model_reports extends CI_Model
 
 				$final_data[$get_mon_year][] = '';
 				foreach ($result as $k => $v) {
-					$month_year = date('Y-m', $v['date_time']);
+					$month_year = date('Y-m', $v['paid_at']);
 
 					if($get_mon_year == $month_year) {
 						$final_data[$get_mon_year][] = $v;

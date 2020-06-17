@@ -52,7 +52,7 @@
                 <th>Customer First Name</th>
                 <th>Customer Last Name</th>
                 <th>Customer Phone</th>
-                <th>Ordered Time</th>
+                <th>Order Date</th>
                 <th>Total Products</th>
                 <th>Total Amount</th>
                 <th>Paid status</th>

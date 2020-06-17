@@ -60,7 +60,7 @@ class Model_orders extends CI_Model
     	$data = array(
     		'bill_no' => $bill_no,
     		'customer_id' => $customer_id,
-			// 'ordered_at' => date('Y-m-d h:i:s a'),
+			'ordered_at' => strtotime(date('Y-m-d h:i:s a')),
     		'gross_amount' => $this->input->post('gross_amount_value'),
     		'net_amount' => $this->input->post('net_amount_value'),
     		'total_discount' => $this->input->post('discount'),
@@ -112,8 +112,9 @@ class Model_orders extends CI_Model
 		if($id) {
 			$user_id = $this->session->userdata('id');
 			// fetch the order data 
-
+			
 			$data = array(
+				'paid_at' => strtotime(date('Y-m-d h:i:s a')),
 	    		'gross_amount' => $this->input->post('gross_amount_value'),
 	    		'net_amount' => $this->input->post('net_amount_value'),
 	    		'total_discount' => $this->input->post('discount'),

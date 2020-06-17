@@ -44,10 +44,10 @@ class Orders extends Admin_Controller
 			$customers_data = $this->model_customers->getCustomerData($value['customer_id']);
 
 			$count_total_item = $this->model_orders->countOrderItem($value['id']);
-			// $date = date('d-m-Y', $value['ordered_at']);
-			// $time = date('h:i:s a', $value['ordered_at']);
+			$date = date('d M Y', $value['ordered_at']);
+			$time = date('h:i a', $value['ordered_at']);
 
-			// $date_time = $date . ' ' . $time;
+			$order_date = $date . ' ' . $time;
 
 			// button
 			$buttons = '';
@@ -76,7 +76,7 @@ class Orders extends Admin_Controller
 				$customers_data['firstname'],
 				$customers_data['lastname'],
 				$customers_data['phone'],
-				$value['ordered_at'],
+				$order_date,
 				$count_total_item,
 				$value['net_amount'],
 				$paid_status,
@@ -255,7 +255,10 @@ class Orders extends Admin_Controller
 			$this->load->model('model_users');
 			$user = $this->model_users->getUserData($order_data['user_id']);
 
-			$order_date = ($order_data['paid_status'] == 1) ? $order_data['paid_at'] : $order_data['ordered_at'];
+			$date_text = ($order_data['paid_status'] == 1) ? "Pay Date" : "Order Date";
+			$pay_date = date('d M Y', $order_data['paid_at']);
+			$order_date = date('d M Y', $order_data['ordered_at']);
+			$date = ($order_data['paid_status'] == 1) ? $pay_date : $order_date;
 			$paid_status = ($order_data['paid_status'] == 1) ? "Paid" : "Unpaid";
 
 			$html = '<!-- Main content -->
@@ -282,7 +285,7 @@ class Orders extends Admin_Controller
 			      <div class="col-xs-12">
 			        <h2 class="page-header">
 			          nama tokonya
-					  <small class="pull-right">Date: '.$order_date.' '.$user['firstname'].' '.$user['lastname'].'</small>
+					  <small class="pull-right">'.$date_text.': '.$date.' '.$user['firstname'].' '.$user['lastname'].'</small>
 			        </h2>
 			      </div>
 			      <!-- /.col -->
