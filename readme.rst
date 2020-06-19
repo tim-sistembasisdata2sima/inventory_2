@@ -4,7 +4,7 @@ Super Admin Crednetial
 email: admin@ndostore.com
 password: password
 
-database name: stock
+database name: stockms_2
 
 
 ###################
