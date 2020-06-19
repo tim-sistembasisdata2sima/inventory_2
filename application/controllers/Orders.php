@@ -15,6 +15,7 @@ class Orders extends Admin_Controller
 		$this->load->model('model_orders');
 		$this->load->model('model_products');
 		$this->load->model('model_customers');
+		$this->load->model('model_company');
 	}
 
 	/* 
@@ -56,7 +57,7 @@ class Orders extends Admin_Controller
 				$buttons .= '<a target="__blank" href="'.base_url('orders/printDiv/'.$value['id']).'" class="btn btn-default"><i class="fa fa-print"></i></a>';
 			}
 
-			if(in_array('updateOrder', $this->permission)) {
+			if(in_array('updateOrder', $this->permission) && $value['paid_status'] == 2 ) {
 				$buttons .= ' <a href="'.base_url('orders/update/'.$value['id']).'" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
 			}
 
@@ -256,9 +257,8 @@ class Orders extends Admin_Controller
 			$user = $this->model_users->getUserData($order_data['user_id']);
 
 			$date_text = ($order_data['paid_status'] == 1) ? "Pay Date" : "Order Date";
-			$pay_date = date('d M Y', $order_data['paid_at']);
-			$order_date = date('d M Y', $order_data['ordered_at']);
-			$date = ($order_data['paid_status'] == 1) ? $pay_date : $order_date;
+			$date_time = ($order_data['paid_status'] == 1) ? $order_data['paid_at'] : $order_data['ordered_at'];
+			$date = date('d M Y', $date_time);
 			$paid_status = ($order_data['paid_status'] == 1) ? "Paid" : "Unpaid";
 
 			$html = '<!-- Main content -->

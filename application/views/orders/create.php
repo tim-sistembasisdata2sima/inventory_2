@@ -49,7 +49,7 @@
                 <label for="gross_amount" class="col-sm-12 control-label">Date: <?php echo date('Y-m-d') ?></label>
               </div>
               <div class="form-group">
-                <label for="gross_amount" class="col-sm-12 control-label">Date: <?php echo date('h:i a') ?></label>
+                <label for="gross_amount" class="col-sm-12 control-label">Time: <?php echo date('h:i a') ?></label>
               </div>
 
               <div class="col-md-4 col-xs-12 pull pull-left">
@@ -213,7 +213,6 @@
         dataType: 'json',
         success: function (response) {
 
-          // console.log(reponse.x);
           var html = '<tr id="row_' + row_id + '">' +
             '<td>' +
             '<select class="form-control select_group product" data-row-id="' + row_id +

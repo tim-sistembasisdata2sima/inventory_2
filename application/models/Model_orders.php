@@ -5,6 +5,7 @@ class Model_orders extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
+		date_default_timezone_set('Asia/Jakarta');
 	}
 
 	/* get the orders data */
@@ -112,13 +113,23 @@ class Model_orders extends CI_Model
 		if($id) {
 			$user_id = $this->session->userdata('id');
 			// fetch the order data 
-			
+			$date = '';
+			$method = '';
+			if($this->input->post('paid_status') == 1){
+				$date = 'paid_at';
+				$method = $this->input->post('pay_method');
+			}
+			else if ($this->input->post('paid_status') == 2){
+				$date = 'ordered_at';
+				$method = '';
+			}
 			$data = array(
-				'paid_at' => strtotime(date('Y-m-d h:i:s a')),
+				$date => strtotime(date('Y-m-d h:i:s a')),
 	    		'gross_amount' => $this->input->post('gross_amount_value'),
 	    		'net_amount' => $this->input->post('net_amount_value'),
 	    		'total_discount' => $this->input->post('discount'),
-	    		'paid_status' => $this->input->post('paid_status'),
+				'paid_status' => $this->input->post('paid_status'),
+				'method' => $method,
 	    		'user_id' => $user_id
 	    	);
 

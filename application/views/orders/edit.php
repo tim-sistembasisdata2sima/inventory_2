@@ -161,6 +161,20 @@
                       </select>
                     </div>
                   </div>
+                  
+                  <div class="form-group">
+                    <label for="pay_method" class="col-sm-5 control-label">Pay Method</label>
+                    <div class="col-sm-7">
+                      <select type="text" class="form-control" id="pay_method" name="pay_method">
+                        <option value=""></option>
+                        <option value="Cash">Cash</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Debit Card">Debit Card</option>
+                        <option value="Transfer">Transfer from Bank</option>
+                        <option value="E-money">E-money</option>
+                      </select>
+                    </div>
+                  </div>
 
                 </div>
               </div>
