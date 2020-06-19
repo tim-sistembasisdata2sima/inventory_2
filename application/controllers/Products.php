@@ -177,24 +177,26 @@ class Products extends Admin_Controller
         $config['allowed_types'] = 'gif|jpg|png';
         $config['max_size'] = '1000';
 
-        // $config['max_width']  = '1024';s
+        // $config['max_width']  = '1024';
         // $config['max_height']  = '768';
 
         $this->load->library('upload', $config);
-        if ( ! $this->upload->do_upload('product_image'))
-        {
-            $error = $this->upload->display_errors();
-            return $error;
-        }
-        else
+        if ($this->upload->do_upload('product_image'))
         {
             $data = array('upload_data' => $this->upload->data());
             $type = explode('.', $_FILES['product_image']['name']);
             $type = $type[count($type) - 1];
             
             $path = $config['upload_path'].'/'.$config['file_name'].'.'.$type;
-            return ($data == true) ? $path : false;            
+            return ($data == true) ? $path : false;    
         }
+        // else
+        // {
+            // $error = $this->upload->display_errors();
+            // return $error;
+                    
+        // }
+        return $config['upload_path'].'/'."default_image.png";
     }
 
     /*
