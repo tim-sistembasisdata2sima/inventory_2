@@ -96,9 +96,10 @@
               <table class="table table-bordered" id="product_info_table">
                 <thead>
                   <tr>
-                    <th style="width:50%">Product</th>
+                    <th style="width:40%">Product</th>
                     <th style="width:10%">Qty</th>
                     <th style="width:10%">Rate</th>
+                    <th style="width:10%">Discount</th>
                     <th style="width:20%">Amount</th>
                     <th style="width:10%"><button type="button" id="add_row" class="btn btn-default"><i
                           class="fa fa-plus"></i></button></th>
@@ -122,6 +123,9 @@
                       <input type="text" name="rate[]" id="rate_1" class="form-control" disabled autocomplete="off">
                       <input type="hidden" name="rate_value[]" id="rate_value_1" class="form-control"
                         autocomplete="off">
+                    </td>
+                    <td>
+                      <input type="text" name="product_discount[]" id="product_discount_1" class="form-control" disabled onkeyup="getTotal(1)">
                     </td>
                     <td>
                       <input type="text" name="amount[]" id="amount_1" class="form-control" disabled autocomplete="off">
@@ -230,6 +234,8 @@
             '<td><input type="text" name="rate[]" id="rate_' + row_id +
             '" class="form-control" disabled><input type="hidden" name="rate_value[]" id="rate_value_' +
             row_id + '" class="form-control"></td>' +
+            '<td><input type="text" name="product_discount[]" id="product_discount_' + row_id +
+            '" class="form-control" disabled></td>' +
             '<td><input type="text" name="amount[]" id="amount_' + row_id +
             '" class="form-control" disabled><input type="hidden" name="amount_value[]" id="amount_value_' +
             row_id + '" class="form-control"></td>' +
@@ -255,7 +261,7 @@
 
   function getTotal(row = null) {
     if (row) {
-      var total = Number($("#rate_value_" + row).val()) * Number($("#qty_" + row).val());
+      var total = (Number($("#rate_value_" + row).val()) - Number($("#product_discount_" + row).val())) * Number($("#qty_" + row).val());
       total = total.toFixed(2);
       $("#amount_" + row).val(total);
       $("#amount_value_" + row).val(total);
@@ -273,6 +279,8 @@
     if (product_id == "") {
       $("#rate_" + row_id).val("");
       $("#rate_value_" + row_id).val("");
+
+      $("#product_discount_" + row_id).val("");
 
       $("#qty_" + row_id).val("");
 
@@ -293,10 +301,12 @@
           $("#rate_" + row_id).val(response.price);
           $("#rate_value_" + row_id).val(response.price);
 
+          $("#product_discount_" + row_id).val(response.discount);
+
           $("#qty_" + row_id).val(1);
           $("#qty_value_" + row_id).val(1);
 
-          var total = Number(response.price) * 1;
+          var total = (Number(response.price) - Number(response.discount)) * 1;
           total = total.toFixed(2);
           $("#amount_" + row_id).val(total);
           $("#amount_value_" + row_id).val(total);
@@ -362,4 +372,6 @@
     $("#product_info_table tbody tr#row_" + tr_id).remove();
     subAmount();
   }
+
+  
 </script>
