@@ -44,7 +44,6 @@ class Products extends Admin_Controller
 
 		foreach ($data as $key => $value) {
 
-            // $color_attribute = $this->model_attributes->getAttributeValueData($value['attribute_value_id']);
             $supplier_data = $this->model_suppliers->getSupplierData($value['supplier_id']);
 			// button
             $buttons = '';
@@ -63,7 +62,7 @@ class Products extends Admin_Controller
 			$img = '<img src="'.base_url($value['image']).'" alt="'.$value['name'].'" class="img-circle" width="50" height="50" />';
 
             $availability = ($value['availability'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
-
+            
             $qty_status = '';
             if($value['qty'] <= 10) {
                 $qty_status = '<span class="label label-warning">Low !</span>';
@@ -76,12 +75,13 @@ class Products extends Admin_Controller
             }else{
                 $promo_status='';
             }
-            $promo_price = $value['price'] - $value['discount'];
+            $price = $value['price'] - $value['discount'];
+            $net_price = "Rp ".number_format($price,2);
 			$result['data'][$key] = array(
 				$img,
 				$value['sku'],
 				$value['name'],
-				$promo_price . ' ' . $promo_status,
+                $net_price . ' ' . $promo_status,
                 $value['qty'] . ' ' . $qty_status,
                 $availability,
 				$buttons
@@ -115,11 +115,15 @@ class Products extends Admin_Controller
             $user_id = $this->session->userdata('id');
         	$upload_image = $this->upload_image();
 
+            // format currency to number
+            $price = preg_replace('/[^\d\.]/', '', $this->input->post('price'));
+            $discount = preg_replace('/[^\d\.]/', '', $this->input->post('discount'));
+
         	$data = array(
         		'name' => $this->input->post('product_name'),
         		'sku' => $this->input->post('sku'),
-        		'price' => $this->input->post('price'),
-                'discount' => $this->input->post('discount'),
+        		'price' => $price,
+                'discount' => $discount,
                 'qty' => $this->input->post('qty'),
         		'image' => $upload_image,
         		'attribute_value' => json_encode($this->input->post('attribute_value')),
@@ -226,11 +230,15 @@ class Products extends Admin_Controller
             // true case
             $user_id = $this->session->userdata('id');
 
+            // format currency to number
+            $price = preg_replace('/[^\d\.]/', '', $this->input->post('price'));
+            $discount = preg_replace('/[^\d\.]/', '', $this->input->post('discount'));
+
             $data = array(
                 'name' => $this->input->post('product_name'),
                 'sku' => $this->input->post('sku'),
-                'price' => $this->input->post('price'),
-                'discount' => $this->input->post('discount'),
+                'price' => $price,
+                'discount' => $discount,
                 'qty' => $this->input->post('qty'),
                 'description' => $this->input->post('description'),
                 'attribute_value' => json_encode($this->input->post('attribute_value')),
