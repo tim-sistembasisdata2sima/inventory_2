@@ -119,10 +119,58 @@ class Orders extends Admin_Controller
         }
         else {
             // false case
-        	$this->data['products'] = $this->model_products->getActiveProductData();      	
+			$this->data['products'] = $this->model_products->getActiveProductData(); 
+            $this->data['customers'] = $this->model_customers->getCustomerData();
 
             $this->render_template('orders/create', $this->data);
         }	
+	}
+
+	public function addNewCustomer()
+	{
+
+		if(!in_array('createCustomer', $this->permission)) {
+			redirect('orders', 'refresh');
+		}
+
+		$this->form_validation->set_rules('customer_first_name', 'customer first name', 'trim|required');
+		$this->form_validation->set_rules('customer_last_name', 'customer last name', 'trim|required');
+
+		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+
+        if ($this->form_validation->run() == TRUE) {        	
+        	
+			$customer_id = $this->model_orders->addNewCustomer();
+        	
+        	if($customer_id) {
+        		$this->session->set_flashdata('success', 'Successfully add new customer');
+        		redirect('orders/create/'.$customer_id, 'refresh');
+        	}
+        	else {
+        		$this->session->set_flashdata('errors', 'Error occurred!!');
+        		redirect('orders/create/', 'refresh');
+        	}
+        }
+        else {
+            // false case  	
+
+            $this->render_template('orders/create', $this->data);
+        }	
+
+	}
+
+	/*
+	* It gets the customer id passed from the ajax method.
+	* It checks retrieves the particular product data from the product id 
+	* and return the data into the json format.
+	*/
+	public function getCustomerValueById()
+	{
+		$customer_id = $this->input->post('customer_id');
+		if($customer_id) {
+			$customer_data = $this->model_customers->getCustomerData($customer_id);
+			echo json_encode($customer_data);
+		}
 	}
 
 	/*
@@ -200,7 +248,8 @@ class Orders extends Admin_Controller
 			
 			$this->data['customer'] = $this->model_customers->getCustomerData($orders_data['customer_id']);      	
 			
-        	$this->data['products'] = $this->model_products->getActiveProductData();      	
+			$this->data['products'] = $this->model_products->getActiveProductData();  
+			    	
 			
             $this->render_template('orders/edit', $this->data);
         }

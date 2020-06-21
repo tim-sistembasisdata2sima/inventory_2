@@ -47,22 +47,13 @@ class Model_orders extends CI_Model
 	public function create()
 	{
 		$user_id = $this->session->userdata('id');
-		$this->load->model('model_customers');
-		$customer = array (
-			'firstname' => $this->input->post('customer_first_name'),
-			'lastname' => $this->input->post('customer_last_name'),
-    		'address' => $this->input->post('customer_address'),
-    		'phone' => $this->input->post('customer_phone'),
-		);
-		$insert_customer = $this->db->insert('customers',$customer);
-		$customer_id = $this->db->insert_id();
 
 		$bill_no = 'BILPR-'.strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 4));
 		$total_discount = preg_replace('/[^\d\.]/', '', $this->input->post('discount'));
 
     	$data = array(
     		'bill_no' => $bill_no,
-    		'customer_id' => $customer_id,
+    		'customer_id' => $this->input->post('customer_name'),
 			'ordered_at' => strtotime(date('Y-m-d h:i:s a')),
     		'gross_amount' => $this->input->post('gross_amount_value'),
     		'net_amount' => $this->input->post('net_amount_value'),
@@ -101,6 +92,19 @@ class Model_orders extends CI_Model
 		return ($order_id) ? $order_id : false;
 	}
 
+	public function addNewCustomer() {
+		$this->load->model('model_customers');
+		$data = array (
+			'firstname' => $this->input->post('customer_first_name'),
+			'lastname' => $this->input->post('customer_last_name'),
+    		'address' => $this->input->post('address'),
+    		'phone' => $this->input->post('phone'),
+		);
+		$insert = $this->db->insert('customers', $data);
+		$customer_id = $this->db->insert_id();
+		return ($customer_id) ? $customer_id : false;
+
+	}
 	public function countOrderItem($order_id)
 	{
 		if($order_id) {

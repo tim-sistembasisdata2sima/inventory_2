@@ -42,33 +42,31 @@
           <!-- /.box-header -->
           <form role="form" action="<?php base_url('orders/create') ?>" method="post" class="form-horizontal">
             <div class="box-body">
-
+              
               <?php echo validation_errors(); ?>
-
+              
               <div class="form-group">
                 <label for="gross_amount" class="col-sm-12 control-label">Date: <?php echo date('Y-m-d') ?></label>
               </div>
               <div class="form-group">
                 <label for="gross_amount" class="col-sm-12 control-label">Time: <?php echo date('h:i a') ?></label>
               </div>
-
+              
               <div class="col-md-4 col-xs-12 pull pull-left">
-
+                <?php if(in_array('createCustomer', $user_permission)): ?>
+                  <button class="btn btn-primary" data-toggle="modal" data-target="#addCustomerModal">Add Customer</button>
+                  <br /> <br />
+                <?php endif; ?>
+                  
                 <div class="form-group">
-                  <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer
-                    Name</label>
+                  <label for="gross_amount"class="col-sm-5 control-label" style="text-align:left;">Customer Name</label>
                   <div class="col-sm-7">
-                    <input type="text" class="form-control" id="customer_first_name" name="customer_first_name"
-                      placeholder="Enter Customer First Name" autocomplete="off" />
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer
-                    Name</label>
-                  <div class="col-sm-7">
-                    <input type="text" class="form-control" id="customer_last_name" name="customer_last_name"
-                      placeholder="Enter Customer Last Name" autocomplete="off" />
+                    <select class="form-control select_group" id="customer_name" name="customer_name" onchange="getCustomerData()">
+                    <option></option>
+                      <?php foreach ($customers as $k => $v): ?>
+                        <option value="<?php echo $v['id'] ?>"><?php echo $v['firstname'] ?> <?php echo $v['lastname'] ?></option>
+                      <?php endforeach ?>
+                    </select>
                   </div>
                 </div>
 
@@ -77,7 +75,7 @@
                     Address</label>
                   <div class="col-sm-7">
                     <input type="text" class="form-control" id="customer_address" name="customer_address"
-                      placeholder="Enter Customer Address" autocomplete="off">
+                      placeholder="Customer Address" disabled>
                   </div>
                 </div>
 
@@ -86,7 +84,7 @@
                     Phone</label>
                   <div class="col-sm-7">
                     <input type="text" class="form-control" id="customer_phone" name="customer_phone"
-                      placeholder="Enter Customer Phone" autocomplete="off">
+                      placeholder="Customer Phone" disabled>
                   </div>
                 </div>
               </div>
@@ -190,6 +188,55 @@
 </div>
 <!-- /.content-wrapper -->
 
+<?php if(in_array('createCustomer', $user_permission)): ?>
+<!-- create upplier modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="addCustomerModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add Customer</h4>
+      </div>
+
+      <form role="form" action="<?php echo base_url('orders/addNewCustomer') ?>" method="post" id="createCustomerForm">
+
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="gross_amount">Customer First Name</label>
+            <input type="text" class="form-control" id="customer_first_name" name="customer_first_name" placeholder="Enter customer first name" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="gross_amount">Customer Last Name</label>
+            <input type="text" class="form-control" id="customer_last_name" name="customer_last_name" placeholder="Enter customer last name" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="gross_amount">Address</label>
+            <input type="text" class="form-control" id="address" name="address" placeholder="Address" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="gross_amount">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+
+      </form>
+
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<?php endif; ?>
+
+
 <script type="text/javascript">
   var base_url = "<?php echo base_url(); ?>";
 
@@ -258,6 +305,33 @@
     });
 
   }); // /document
+
+  // get customer information from the server
+  function getCustomerData() {
+    var customer_id = $("#customer_name").val();
+    console.log(customer_id)
+    if (customer_id == "") {
+      $("#customer_address").val("");
+      $("#customer_phone").val("");
+
+    } else {
+      $.ajax({
+        url: base_url + 'orders/getCustomerValueById',
+        type: 'post',
+        data: {
+          customer_id: customer_id
+        },
+        dataType: 'json',
+        success: function (response) {
+          // setting the rate value into the rate input field
+          $("#customer_address").val(response.address);
+          $("#customer_phone").val(response.phone);
+          console.log(response)
+         
+        } // /success
+      }); // /ajax function to fetch the product data 
+    }
+  }
 
   function getTotal(row = null) {
     if (row) {
@@ -446,4 +520,6 @@
     caret_pos = updated_len - original_len + caret_pos;
     input[0].setSelectionRange(caret_pos, caret_pos);
   }
+
+  
 </script>
