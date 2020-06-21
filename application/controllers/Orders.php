@@ -15,7 +15,7 @@ class Orders extends Admin_Controller
 		$this->load->model('model_orders');
 		$this->load->model('model_products');
 		$this->load->model('model_customers');
-		$this->load->model('model_company');
+		
 	}
 
 	/* 
@@ -293,6 +293,8 @@ class Orders extends Admin_Controller
 	*/
 	public function printDiv($id)
 	{
+		$this->load->model('model_company');
+
 		if(!in_array('viewOrder', $this->permission)) {
             redirect('dashboard', 'refresh');
         }
@@ -301,6 +303,7 @@ class Orders extends Admin_Controller
 			$order_data = $this->model_orders->getOrdersData($id);
 			$orders_items = $this->model_orders->getOrdersItemData($id);
 			$customer = $this->model_customers->getCustomerData($order_data['customer_id']);
+			$company = $this->model_company->getCompanyData(1);
 
 			$this->load->model('model_users');
 			$user = $this->model_users->getUserData($order_data['user_id']);
@@ -309,7 +312,7 @@ class Orders extends Admin_Controller
 			$date_time = ($order_data['paid_status'] == 1) ? $order_data['paid_at'] : $order_data['ordered_at'];
 			$date = date('d M Y', $date_time);
 			$paid_status = ($order_data['paid_status'] == 1) ? "Paid" : "Unpaid";
-
+			
 			$html = '<!-- Main content -->
 			<!DOCTYPE html>
 			<html>
@@ -333,7 +336,7 @@ class Orders extends Admin_Controller
 			    <div class="row">
 			      <div class="col-xs-12">
 			        <h2 class="page-header">
-			          nama tokonya
+					'.$company['name'].'
 					  <small class="pull-right">'.$date_text.': '.$date.' '.$user['firstname'].' '.$user['lastname'].'</small>
 			        </h2>
 			      </div>
@@ -349,14 +352,9 @@ class Orders extends Admin_Controller
 						<td>'.$order_data['bill_no'].'</td>
 					</tr>
 					<tr>
-						<th><b>First Name</b></th>
+						<th><b>Name</b></th>
 						<td><b>:</b></td>
-						<td>'.$customer['firstname'].'</td>
-					</tr>
-					<tr>
-						<th><b>Last Name</b></th>
-						<td><b>:</b></td>
-						<td>'.$customer['lastname'].'</td>
+						<td>'.$customer['firstname'].' '.$customer['lastname'].'</td>
 					</tr>
 					<tr>
 						<th><b>Address</b></th>
@@ -381,6 +379,8 @@ class Orders extends Admin_Controller
 			          <tr>
 			            <th>Product name</th>
 			            <th>Price</th>
+			            <th>Discount</th>
+			            <th>Promo Price</th>
 			            <th>Qty</th>
 			            <th>Amount</th>
 			          </tr>
@@ -388,12 +388,16 @@ class Orders extends Admin_Controller
 			          <tbody>'; 
 
 			          foreach ($orders_items as $k => $v) {
+						$promo_price = $v['rate'] - $v['product_discount'];
+
 
 			          	$product_data = $this->model_products->getProductData($v['product_id']); 
 			          	
 			          	$html .= '<tr>
 				            <td>'.$product_data['name'].'</td>
 				            <td>'.$v['rate'].'</td>
+				            <td>'.$v['product_discount'].'</td>
+				            <td>'.$promo_price.'</td>
 				            <td>'.$v['qty'].'</td>
 				            <td>'.$v['amount'].'</td>
 			          	</tr>';
@@ -428,13 +432,26 @@ class Orders extends Admin_Controller
 			            <tr>
 			              <th>Paid Status:</th>
 			              <td>'.$paid_status.'</td>
-			            </tr>
+						</tr>
+			            <tr>
+			              <th>Method:</th>
+			              <td>'.$order_data['method'].'</td>
+						</tr>
 			          </table>
 			        </div>
 			      </div>
 			      <!-- /.col -->
 			    </div>
-			    <!-- /.row -->
+				<!-- /.row -->';
+				if($order_data['paid_status'] == 1){
+					$text = "Thank you for buying our product!";
+				}else {
+					$text = "Thank you for ordering our product!";
+				}
+				$html .='
+				<p style="text-align:center"><em>'.$text.'</em></p>
+				<p style="text-align:center; font-size:1.2rem">'.$company['name'].' | telephone: '.$company['phone'].' | address: '.$company['address'].'<br> '.$company['country'].'</p>
+
 			  </section>
 			  <!-- /.content -->
 			</div>
