@@ -87,12 +87,12 @@
                 <table class="table table-bordered" id="product_info_table">
                   <thead>
                     <tr>
-                      <th style="width:40%">Product</th>
+                      <th style="width:30%">Product</th>
                       <th style="width:10%">Qty</th>
-                      <th style="width:10%">Rate</th>
-                      <th style="width:10%">Discount</th>
+                      <th style="width:20%">Rate</th>
+                      <th style="width:15%">Discount</th>
                       <th style="width:20%">Amount</th>
-                      <th style="width:10%"><button type="button" id="add_row" class="btn btn-default"><i class="fa fa-plus"></i></button></th>
+                      <th style="width:5%"><button type="button" id="add_row" class="btn btn-default"><i class="fa fa-plus"></i></button></th>
                     </tr>
                   </thead>
 

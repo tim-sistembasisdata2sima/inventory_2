@@ -58,13 +58,15 @@ class Model_orders extends CI_Model
 		$customer_id = $this->db->insert_id();
 
 		$bill_no = 'BILPR-'.strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 4));
+		$total_discount = preg_replace('/[^\d\.]/', '', $this->input->post('discount'));
+
     	$data = array(
     		'bill_no' => $bill_no,
     		'customer_id' => $customer_id,
 			'ordered_at' => strtotime(date('Y-m-d h:i:s a')),
     		'gross_amount' => $this->input->post('gross_amount_value'),
     		'net_amount' => $this->input->post('net_amount_value'),
-    		'total_discount' => $this->input->post('discount'),
+    		'total_discount' => $total_discount,
     		'paid_status' => 2,
     		'user_id' => $user_id
     	);
@@ -76,7 +78,7 @@ class Model_orders extends CI_Model
 
 		$count_product = count($this->input->post('product'));
     	for($x = 0; $x < $count_product; $x++) {
-    		$items = array(
+			$items = array(
     			'order_id' => $order_id,
     			'product_id' => $this->input->post('product')[$x],
     			'qty' => $this->input->post('qty')[$x],

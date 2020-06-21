@@ -96,12 +96,12 @@
               <table class="table table-bordered" id="product_info_table">
                 <thead>
                   <tr>
-                    <th style="width:40%">Product</th>
+                    <th style="width:30%">Product</th>
                     <th style="width:10%">Qty</th>
-                    <th style="width:10%">Rate</th>
-                    <th style="width:10%">Discount</th>
+                    <th style="width:20%">Rate</th>
+                    <th style="width:15%">Discount</th>
                     <th style="width:20%">Amount</th>
-                    <th style="width:10%"><button type="button" id="add_row" class="btn btn-default"><i
+                    <th style="width:5%"><button type="button" id="add_row" class="btn btn-default"><i
                           class="fa fa-plus"></i></button></th>
                   </tr>
                 </thead>
@@ -117,7 +117,7 @@
                         <?php endforeach ?>
                       </select>
                     </td>
-                    <td><input type="text" name="qty[]" id="qty_1" class="form-control" required onkeyup="getTotal(1)">
+                    <td><input type="number" min="0" name="qty[]" id="qty_1" class="form-control" required onkeyup="getTotal(1)">
                     </td>
                     <td>
                       <input type="text" name="rate[]" id="rate_1" class="form-control" disabled autocomplete="off">
@@ -153,7 +153,7 @@
                 <div class="form-group">
                   <label for="discount" class="col-sm-5 control-label">Discount</label>
                   <div class="col-sm-7">
-                    <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount"
+                    <input type="text" data-type="currency" class="form-control" id="discount" name="discount" placeholder="Discount"
                       onkeyup="subAmount()" autocomplete="off">
                   </div>
                 </div>
@@ -229,7 +229,7 @@
 
           html += '</select>' +
             '</td>' +
-            '<td><input type="number" name="qty[]" id="qty_' + row_id +
+            '<td><input type="number" min="0" name="qty[]" id="qty_' + row_id +
             '" class="form-control" onkeyup="getTotal(' + row_id + ')"></td>' +
             '<td><input type="text" name="rate[]" id="rate_' + row_id +
             '" class="form-control" disabled><input type="hidden" name="rate_value[]" id="rate_value_' +
@@ -261,9 +261,11 @@
 
   function getTotal(row = null) {
     if (row) {
-      var total = (Number($("#rate_value_" + row).val()) - Number($("#product_discount_" + row).val())) * Number($("#qty_" + row).val());
+      var rate_value = ($("#rate_value_" + row).val()).replace(/[^0-9.-]+/g,"");
+      var product_discount = ($("#product_discount_" + row).val()).replace(/[^0-9.-]+/g,"");
+      var total = (Number(rate_value) - Number(product_discount)) * Number($("#qty_" + row).val());
       total = total.toFixed(2);
-      $("#amount_" + row).val(total);
+      $("#amount_" + row).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(total));
       $("#amount_value_" + row).val(total);
 
       subAmount();
@@ -297,20 +299,20 @@
         dataType: 'json',
         success: function (response) {
           // setting the rate value into the rate input field
-
-          $("#rate_" + row_id).val(response.price);
+        
+          $("#rate_" + row_id).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(response.price));
           $("#rate_value_" + row_id).val(response.price);
 
-          $("#product_discount_" + row_id).val(response.discount);
+          $("#product_discount_" + row_id).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(response.discount));
 
           $("#qty_" + row_id).val(1);
           $("#qty_value_" + row_id).val(1);
 
           var total = (Number(response.price) - Number(response.discount)) * 1;
           total = total.toFixed(2);
-          $("#amount_" + row_id).val(total);
+          $("#amount_" + row_id).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(total));
           $("#amount_value_" + row_id).val(total);
-
+      
           subAmount();
         } // /success
       }); // /ajax function to fetch the product data 
@@ -327,41 +329,29 @@
       var count = $(tr).attr('id');
       count = count.substring(4);
 
-      totalSubAmount = Number(totalSubAmount) + Number($("#amount_" + count).val());
+      totalSubAmount = Number(totalSubAmount) + Number($("#amount_value_" + count).val());
     } // /for
 
     totalSubAmount = totalSubAmount.toFixed(2);
 
     // sub total
-    $("#gross_amount").val(totalSubAmount);
+    $("#gross_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(totalSubAmount));
     $("#gross_amount_value").val(totalSubAmount);
-
-    // vat
-    // var vat = (Number($("#gross_amount").val())/100) * vat_charge;
-    // vat = vat.toFixed(2);
-    // $("#vat_charge").val(vat);
-    // $("#vat_charge_value").val(vat);
-
-    // service
-    // var service = (Number($("#gross_amount").val())/100) * service_charge;
-    // service = service.toFixed(2);
-    // $("#service_charge").val(service);
-    // $("#service_charge_value").val(service);
 
     // total amount
     var totalAmount = (Number(totalSubAmount));
     totalAmount = totalAmount.toFixed(2);
-    $("#net_amount").val(totalAmount);
+    $("#net_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(totalAmount));
     $("#totalAmountValue").val(totalAmount);
 
-    var discount = $("#discount").val();
+    var discount = ($("#discount").val()).replace(/[^0-9.-]+/g,"");
     if (discount) {
       var grandTotal = Number(totalAmount) - Number(discount);
       grandTotal = grandTotal.toFixed(2);
-      $("#net_amount").val(grandTotal);
+      $("#net_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(grandTotal));
       $("#net_amount_value").val(grandTotal);
     } else {
-      $("#net_amount").val(totalAmount);
+      $("#net_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(totalAmount));
       $("#net_amount_value").val(totalAmount);
 
     } // /else discount 
@@ -373,5 +363,87 @@
     subAmount();
   }
 
-  
+  //Format number to currency
+  $("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() { 
+      formatCurrency($(this), "blur");
+    }
+  });
+
+
+  function formatNumber(n) {
+    // format number 1000000 to 1,234,567
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+
+  function formatCurrency(input, blur) {
+    // appends $ to value, validates decimal side
+    // and puts cursor back in right position.
+    
+    // get input value
+    var input_val = input.val();
+    
+    // don't validate empty input
+    if (input_val === "") { return; }
+    
+    // original length
+    var original_len = input_val.length;
+
+    // initial caret position 
+    var caret_pos = input.prop("selectionStart");
+      
+    // check for decimal
+    if (input_val.indexOf(".") >= 0) {
+
+      // get position of first decimal
+      // this prevents multiple decimals from
+      // being entered
+      var decimal_pos = input_val.indexOf(".");
+
+      // split number by decimal point
+      var left_side = input_val.substring(0, decimal_pos);
+      var right_side = input_val.substring(decimal_pos);
+
+      // add commas to left side of number
+      left_side = formatNumber(left_side);
+
+      // validate right side
+      right_side = formatNumber(right_side);
+      
+      // On blur make sure 2 numbers after decimal
+      if (blur === "blur") {
+        right_side += "00";
+      }
+      
+      // Limit decimal to only 2 digits
+      right_side = right_side.substring(0, 2);
+
+      // join number by .
+      input_val = "IDR " + left_side + "." + right_side;
+
+    } else {
+      // no decimal entered
+      // add commas to number
+      // remove all non-digits
+      input_val = formatNumber(input_val);
+      input_val = "IDR " + input_val;
+      
+      // final formatting
+      if (blur === "blur") {
+        input_val += ".00";
+      }
+    }
+    
+    // send updated string to input
+    input.val(input_val);
+
+    // put caret back in the right position
+    var updated_len = input_val.length;
+    caret_pos = updated_len - original_len + caret_pos;
+    input[0].setSelectionRange(caret_pos, caret_pos);
+  }
 </script>
