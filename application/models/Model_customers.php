@@ -10,8 +10,8 @@ class Model_customers extends CI_Model
 	/*get the active customers information*/
 	public function getActiveCustomers()
 	{
-		$sql = "SELECT * FROM customers WHERE active = ?";
-		$query = $this->db->query($sql, array(1));
+		$sql = "SELECT * FROM customers";
+		$query = $this->db->query($sql, array());
 		return $query->result_array();
 	}
 
