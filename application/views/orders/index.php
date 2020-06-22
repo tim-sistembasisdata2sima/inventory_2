@@ -49,8 +49,7 @@
               <thead>
               <tr>
                 <th>Bill no</th>
-                <th>Customer First Name</th>
-                <th>Customer Last Name</th>
+                <th>Customer Name</th>
                 <th>Customer Phone</th>
                 <th>Order Date</th>
                 <th>Total Products</th>

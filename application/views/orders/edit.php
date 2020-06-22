@@ -55,29 +55,23 @@
                 <div class="col-md-4 col-xs-12 pull pull-left">
 
                   <div class="form-group">
-                    <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer First Name</label>
+                    <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Name</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_first_name" name="customer_first_name" placeholder="Enter Customer Name" disabled value="<?php echo $customer['firstname'] ?>" autocomplete="off"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Last Name</label>
-                    <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_last_name" name="customer_last_name" placeholder="Enter Last Customer Name" disabled value="<?php echo $customer['lastname'] ?>" autocomplete="off"/>
+                      <input type="text" class="form-control" id="customer_first_name" name="customer_first_name" placeholder="Customer Name" disabled value="<?php echo $customer['firstname'] ?> <?php echo $customer['lastname'] ?>" autocomplete="off"/>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Address</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_address" name="customer_address" placeholder="Enter Customer Address" disabled value="<?php echo $customer['address'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="customer_address" name="customer_address" placeholder="Customer Address" disabled value="<?php echo $customer['address'] ?>" autocomplete="off">
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Phone</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_phone" name="customer_phone" placeholder="Enter Customer Phone" disabled value="<?php echo $customer['phone'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="customer_phone" name="customer_phone" placeholder="Customer Phone" disabled value="<?php echo $customer['phone'] ?>" autocomplete="off">
                     </div>
                   </div>
                 </div>
@@ -111,16 +105,17 @@
                               <?php endforeach ?>
                             </select>
                           </td>
-                          <td><input type="text" name="qty[]" id="qty_<?php echo $x; ?>" class="form-control" required onkeyup="getTotal(<?php echo $x; ?>)" value="<?php echo $val['qty'] ?>" autocomplete="off"></td>
+                          <td><input type="number" min="0" name="qty[]" id="qty_<?php echo $x; ?>" class="form-control" required onkeyup="getTotal(<?php echo $x; ?>)" value="<?php echo $val['qty'] ?>" autocomplete="off"></td>
                           <td>
-                            <input type="text" name="rate[]" id="rate_<?php echo $x; ?>" class="form-control" disabled value="<?php echo $val['rate'] ?>" autocomplete="off">
-                            <input type="hidden" name="rate_value[]" id="rate_value_<?php echo $x; ?>" class="form-control" value="<?php echo $val['rate'] ?>" autocomplete="off">
+                            <input type="text" name="rate[]" id="rate_<?php echo $x; ?>" class="form-control" disabled value="<?php echo "IDR ".number_format($val['rate'],2);?>" autocomplete="off">
+                            <input type="hidden" name="rate_value[]" id="rate_value_" class="form-control" value="<?php echo $val['rate'] ?>" autocomplete="off">
                           </td>
                           <td>
-                            <input type="text" name="product_discount[]" id="product_discount_1" class="form-control" disabled autocomplete="off">
+                            <input type="text" name="product_discount[]" id="product_discount_<?php echo $x; ?>" class="form-control" disabled value="<?php echo "IDR ".number_format($val['product_discount'],2);?>" autocomplete="off">
+                            <input type="hidden" name="product_discount_value[]" id="product_discount_value_" class="form-control" value="<?php echo $val['product_discount'] ?>" autocomplete="off">
                           </td>
                           <td>
-                            <input type="text" name="amount[]" id="amount_<?php echo $x; ?>" class="form-control" disabled value="<?php echo $val['amount'] ?>" autocomplete="off">
+                            <input type="text" name="amount[]" id="amount_<?php echo $x; ?>" class="form-control" disabled value="<?php echo "IDR ".number_format($val['amount'],2);?>" autocomplete="off">
                             <input type="hidden" name="amount_value[]" id="amount_value_<?php echo $x; ?>" class="form-control" value="<?php echo $val['amount'] ?>" autocomplete="off">
                           </td>
                           <td><button type="button" class="btn btn-default" onclick="removeRow('<?php echo $x; ?>')"><i class="fa fa-close"></i></button></td>
@@ -138,20 +133,20 @@
                   <div class="form-group">
                     <label for="gross_amount" class="col-sm-5 control-label">Gross Amount</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="gross_amount" name="gross_amount" disabled value="<?php echo $order_data['order']['gross_amount'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="gross_amount" name="gross_amount" disabled value="<?php echo "IDR ".number_format($order_data['order']['gross_amount'],2); ?>" autocomplete="off">
                       <input type="hidden" class="form-control" id="gross_amount_value" name="gross_amount_value" value="<?php echo $order_data['order']['gross_amount'] ?>" autocomplete="off">
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="discount" class="col-sm-5 control-label">Discount</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount" onkeyup="subAmount()" value="<?php echo $order_data['order']['total_discount'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount" onkeyup="subAmount()" value="<?php echo "IDR ".number_format($order_data['order']['total_discount'],2);?>" autocomplete="off">
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="net_amount" class="col-sm-5 control-label">Net Amount</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="net_amount" name="net_amount" disabled value="<?php echo $order_data['order']['net_amount'] ?>" autocomplete="off">
+                      <input type="text" class="form-control" id="net_amount" name="net_amount" disabled value="<?php echo "IDR ".number_format($order_data['order']['net_amount'],2); ?>" autocomplete="off">
                       <input type="hidden" class="form-control" id="net_amount_value" name="net_amount_value" value="<?php echo $order_data['order']['net_amount'] ?>" autocomplete="off">
                     </div>
                   </div>
@@ -159,23 +154,23 @@
                   <div class="form-group">
                     <label for="paid_status" class="col-sm-5 control-label">Paid Status</label>
                     <div class="col-sm-7">
-                      <select type="text" class="form-control" id="paid_status" name="paid_status">
-                        <option value="1">Paid</option>
-                        <option value="2">Unpaid</option>
+                      <select type="text" class="form-control" id="paid_status" name="paid_status" onchange="showDiv('method', this)">
+                        <option value="1" <?php if($order_data['order']['paid_status'] == 1) { echo "selected='selected'"; } ?>>Paid</option>
+                        <option value="2" <?php if($order_data['order']['paid_status'] == 2) { echo "selected='selected'"; } ?> >Unpaid</option>
                       </select>
                     </div>
                   </div>
                   
-                  <div class="form-group">
+                  <div class="form-group" id="method">
                     <label for="pay_method" class="col-sm-5 control-label">Pay Method</label>
                     <div class="col-sm-7">
                       <select type="text" class="form-control" id="pay_method" name="pay_method">
-                        <option value=""></option>
-                        <option value="Cash">Cash</option>
-                        <option value="Credit Card">Credit Card</option>
-                        <option value="Debit Card">Debit Card</option>
-                        <option value="Transfer">Transfer from Bank</option>
-                        <option value="E-money">E-money</option>
+                        <option value="none" <?php if($order_data['order']['method'] == 'none' || '') { echo "selected='selected'"; } ?>></option>
+                        <option value="Cash" <?php if($order_data['order']['method'] == 'Cash') { echo "selected='selected'"; } ?>>Cash</option>
+                        <option value="Credit Card" <?php if($order_data['order']['method'] == 'Credit Card') { echo "selected='selected'"; } ?>>Credit Card</option>
+                        <option value="Debit Card" <?php if($order_data['order']['method'] == 'Debit Card') { echo "selected='selected'"; } ?>>Debit Card</option>
+                        <option value="Transfer" <?php if($order_data['order']['method'] == 'Transfer') { echo "selected='selected'"; } ?>>Transfer from Bank</option>
+                        <option value="E-money" <?php if($order_data['order']['method'] == 'E-money') { echo "selected='selected'"; } ?>>E-money</option>
                       </select>
                     </div>
                   </div>
@@ -289,11 +284,14 @@
 
   function getTotal(row = null) {
     if(row) {
-      var total = (Number($("#rate_value_"+row).val()) - Number($("#product_discount_"+row).val())) * Number($("#qty_"+row).val());
+      console.log($("#rate_value_" + row).val())
+      var rate_value = ($("#rate_value_" + row).val()).replace(/[^0-9.-]+/g,"");
+      var product_discount = ($("#product_discount_value_" + row).val()).replace(/[^0-9.-]+/g,"");
+      var total = (Number(rate_value) - Number(product_discount)) * Number($("#qty_" + row).val());
       total = total.toFixed(2);
-      $("#amount_"+row).val(total);
-      $("#amount_value_"+row).val(total);
-      
+      $("#amount_" + row).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(total));
+      $("#amount_value_" + row).val(total);
+
       subAmount();
 
     } else {
@@ -310,6 +308,7 @@
       $("#rate_value_"+row_id).val("");
 
       $("#product_discount_"+row_id).val("");
+      $("#product_discount_value_"+row_id).val("");
 
       $("#qty_"+row_id).val("");           
 
@@ -325,17 +324,18 @@
         success:function(response) {
           // setting the rate value into the rate input field
           
-          $("#rate_"+row_id).val(response.price);
+          $("#rate_"+row_id).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(response.price));
           $("#rate_value_"+row_id).val(response.price);
 
-          $("#product_discount_"+row_id).val(response.discount);
+          $("#product_discount_"+row_id).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(response.discount));
+          $("#product_discount_value_"+row_id).val(response.discount);
 
           $("#qty_"+row_id).val(1);
           $("#qty_value_"+row_id).val(1);
 
-          var total = Number(response.price) * 1;
+          var total = (Number(response.price) - Number(response.discount)) * 1;
           total = total.toFixed(2);
-          $("#amount_"+row_id).val(total);
+          $("#amount_" + row_id).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(total));
           $("#amount_value_"+row_id).val(total);
           
           subAmount();
@@ -359,51 +359,138 @@
     totalSubAmount = totalSubAmount.toFixed(2);
 
     // sub total
-    $("#gross_amount").val(totalSubAmount);
+    $("#gross_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(totalSubAmount));
     $("#gross_amount_value").val(totalSubAmount);
     
     // total amount
     var totalAmount = (Number(totalSubAmount));
     totalAmount = totalAmount.toFixed(2);
-    // $("#net_amount").val(totalAmount);
-    // $("#totalAmountValue").val(totalAmount);
+    $("#net_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(totalAmount));
+    $("#totalAmountValue").val(totalAmount);
 
-    var discount = $("#discount").val();
+    var discount = ($("#discount").val()).replace(/[^0-9.-]+/g,"");
     if(discount) {
       var grandTotal = Number(totalAmount) - Number(discount);
       grandTotal = grandTotal.toFixed(2);
-      $("#net_amount").val(grandTotal);
+      $("#net_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(grandTotal));
       $("#net_amount_value").val(grandTotal);
     } else {
-      $("#net_amount").val(totalAmount);
+      $("#net_amount").val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(totalAmount));
       $("#net_amount_value").val(totalAmount);
       
     } // /else discount 
 
-    var paid_amount = Number($("#paid_amount").val());
-    if(paid_amount) {
-      var net_amount_value = Number($("#net_amount_value").val());
-      var remaning = net_amount_value - paid_amount;
-      $("#remaining").val(remaning.toFixed(2));
-      $("#remaining_value").val(remaning.toFixed(2));
-    }
+    // var paid_amount = Number($("#paid_amount").val());
+    // if(paid_amount) {
+    //   var net_amount_value = Number($("#net_amount_value").val());
+    //   var remaning = net_amount_value - paid_amount;
+    //   $("#remaining").val(remaning.toFixed(2));
+    //   $("#remaining_value").val(remaning.toFixed(2));
+    // }
 
   } // /sub total amount
 
-  function paidAmount() {
-    var grandTotal = $("#net_amount_value").val();
+  // function paidAmount() {
+  //   var grandTotal = $("#net_amount_value").val();
 
-    if(grandTotal) {
-      var dueAmount = Number($("#net_amount_value").val()) - Number($("#paid_amount").val());
-      dueAmount = dueAmount.toFixed(2);
-      $("#remaining").val(dueAmount);
-      $("#remaining_value").val(dueAmount);
-    } // /if
-  } // /paid amoutn function
+  //   if(grandTotal) {
+  //     var dueAmount = Number($("#net_amount_value").val()) - Number($("#paid_amount").val());
+  //     dueAmount = dueAmount.toFixed(2);
+  //     $("#remaining").val(dueAmount);
+  //     $("#remaining_value").val(dueAmount);
+  //   } // /if
+  // } // /paid amoutn function
 
   function removeRow(tr_id)
   {
     $("#product_info_table tbody tr#row_"+tr_id).remove();
     subAmount();
+  }
+
+  //Format number to currency
+  $("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() { 
+      formatCurrency($(this), "blur");
+    }
+  });
+
+  function formatNumber(n) {
+    // format number 1000000 to 1,234,567
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function formatCurrency(input, blur) {
+    // appends $ to value, validates decimal side
+    // and puts cursor back in right position.
+    
+    // get input value
+    var input_val = input.val();
+    
+    // don't validate empty input
+    if (input_val === "") { return; }
+    
+    // original length
+    var original_len = input_val.length;
+
+    // initial caret position 
+    var caret_pos = input.prop("selectionStart");
+      
+    // check for decimal
+    if (input_val.indexOf(".") >= 0) {
+
+      // get position of first decimal
+      // this prevents multiple decimals from
+      // being entered
+      var decimal_pos = input_val.indexOf(".");
+
+      // split number by decimal point
+      var left_side = input_val.substring(0, decimal_pos);
+      var right_side = input_val.substring(decimal_pos);
+
+      // add commas to left side of number
+      left_side = formatNumber(left_side);
+
+      // validate right side
+      right_side = formatNumber(right_side);
+      
+      // On blur make sure 2 numbers after decimal
+      if (blur === "blur") {
+        right_side += "00";
+      }
+      
+      // Limit decimal to only 2 digits
+      right_side = right_side.substring(0, 2);
+
+      // join number by .
+      input_val = "IDR " + left_side + "." + right_side;
+
+    } else {
+      // no decimal entered
+      // add commas to number
+      // remove all non-digits
+      input_val = formatNumber(input_val);
+      input_val = "IDR " + input_val;
+      
+      // final formatting
+      if (blur === "blur") {
+        input_val += ".00";
+      }
+    }
+    
+    // send updated string to input
+    input.val(input_val);
+
+    // put caret back in the right position
+    var updated_len = input_val.length;
+    caret_pos = updated_len - original_len + caret_pos;
+    input[0].setSelectionRange(caret_pos, caret_pos);
+  }
+
+  function showDiv(divId, element)
+  {
+      document.getElementById(divId).style.display = element.value == 1 ? 'block' : 'none';
   }
 </script>

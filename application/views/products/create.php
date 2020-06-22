@@ -241,14 +241,14 @@
       right_side = right_side.substring(0, 2);
 
       // join number by .
-      input_val = "Rp " + left_side + "." + right_side;
+      input_val = "IDR " + left_side + "." + right_side;
 
     } else {
       // no decimal entered
       // add commas to number
       // remove all non-digits
       input_val = formatNumber(input_val);
-      input_val = "Rp " + input_val;
+      input_val = "IDR " + input_val;
       
       // final formatting
       if (blur === "blur") {

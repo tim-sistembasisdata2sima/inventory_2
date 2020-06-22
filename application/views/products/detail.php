@@ -22,10 +22,10 @@
           <div class="box">
             <div class="box-header">
               <h3 class="box-title"><?php echo $detail_data['name']; ?></h3>
-              <img src="<?php echo base_url($detail_data['image']) ?>" alt="<?php echo $detail_data['name']?>"  width="100" height="100" />'
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+              <img src="<?php echo base_url($detail_data['image']) ?>" alt="<?php echo $detail_data['name']?>"  width="400" height="auto" />'
               <table class="table table-bordered table-condensed table-hovered">
                 <tr>
                   <th>Product name</th>

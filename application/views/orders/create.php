@@ -123,7 +123,9 @@
                         autocomplete="off">
                     </td>
                     <td>
-                      <input type="text" name="product_discount[]" id="product_discount_1" class="form-control" disabled onkeyup="getTotal(1)">
+                      <input type="text" name="product_discount[]" id="product_discount_1" class="form-control" disabled autocomplete="off" onkeyup="getTotal(1)">
+                      <input type="hidden" name="product_discount_value[]" id="product_discount_value_1" class="form-control"
+                        autocomplete="off">
                     </td>
                     <td>
                       <input type="text" name="amount[]" id="amount_1" class="form-control" disabled autocomplete="off">
@@ -282,7 +284,8 @@
             '" class="form-control" disabled><input type="hidden" name="rate_value[]" id="rate_value_' +
             row_id + '" class="form-control"></td>' +
             '<td><input type="text" name="product_discount[]" id="product_discount_' + row_id +
-            '" class="form-control" disabled></td>' +
+            '" class="form-control" disabled><input type="hidden" name="product_discount_value[]" id="product_discount_value_' +
+            row_id + '" class="form-control"></td>' +
             '<td><input type="text" name="amount[]" id="amount_' + row_id +
             '" class="form-control" disabled><input type="hidden" name="amount_value[]" id="amount_value_' +
             row_id + '" class="form-control"></td>' +
@@ -336,7 +339,7 @@
   function getTotal(row = null) {
     if (row) {
       var rate_value = ($("#rate_value_" + row).val()).replace(/[^0-9.-]+/g,"");
-      var product_discount = ($("#product_discount_" + row).val()).replace(/[^0-9.-]+/g,"");
+      var product_discount = ($("#product_discount_value_" + row).val()).replace(/[^0-9.-]+/g,"");
       var total = (Number(rate_value) - Number(product_discount)) * Number($("#qty_" + row).val());
       total = total.toFixed(2);
       $("#amount_" + row).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(total));
@@ -357,6 +360,7 @@
       $("#rate_value_" + row_id).val("");
 
       $("#product_discount_" + row_id).val("");
+      $("#product_discount_value_" + row_id).val("");
 
       $("#qty_" + row_id).val("");
 
@@ -378,6 +382,7 @@
           $("#rate_value_" + row_id).val(response.price);
 
           $("#product_discount_" + row_id).val(Intl.NumberFormat('en-ID', { style: 'currency', currency: 'IDR' }).format(response.discount));
+          $("#product_discount_value_" + row_id).val(response.discount);
 
           $("#qty_" + row_id).val(1);
           $("#qty_value_" + row_id).val(1);

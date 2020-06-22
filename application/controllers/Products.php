@@ -76,7 +76,7 @@ class Products extends Admin_Controller
                 $promo_status='';
             }
             $price = $value['price'] - $value['discount'];
-            $net_price = "Rp ".number_format($price,2);
+            $net_price = "IDR ".number_format($price,2);
 			$result['data'][$key] = array(
 				$img,
 				$value['sku'],
@@ -321,20 +321,11 @@ class Products extends Admin_Controller
         }
         
         
-        // $availability = ($value['availability'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
-
-        // $qty_status = '';
-        // if($product_data['qty'] <= 10) {
-        //     $qty_status = '<span class="label label-warning">Low !</span>';
-        // } else if($product_data['qty'] <= 0) {
-        //     $qty_status = '<span class="label label-danger">Out of stock !</span>';
-        // }
-        
 
 		$detail_data = $this->model_products->getProductData($product_id);
         $this->data['detail_data'] = $detail_data;
         
-        $attribute_data = $detail_data['attribute_value'];
+        $attribute_data = preg_replace('/[^a-zA-Z,.]*/', '',$detail_data['attribute_value']) ;
         $this->data['attribute_data'] = $attribute_data;
 
         $brand_data = $this->model_brands->getBrandData($detail_data['brand_id']);

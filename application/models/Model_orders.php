@@ -67,13 +67,16 @@ class Model_orders extends CI_Model
 
 		$this->load->model('model_products');
 
+		$product_discount = preg_replace('/[^\d\.]/', '', $this->input->post('product_discount_value'));
+
 		$count_product = count($this->input->post('product'));
     	for($x = 0; $x < $count_product; $x++) {
 			$items = array(
     			'order_id' => $order_id,
     			'product_id' => $this->input->post('product')[$x],
     			'qty' => $this->input->post('qty')[$x],
-    			'rate' => $this->input->post('rate_value')[$x],
+				'rate' => $this->input->post('rate_value')[$x],
+				'product_discount' => $product_discount[$x],
     			'amount' => $this->input->post('amount_value')[$x],
     		);
 

@@ -57,7 +57,7 @@ class Orders extends Admin_Controller
 				$buttons .= '<a target="__blank" href="'.base_url('orders/printDiv/'.$value['id']).'" class="btn btn-default"><i class="fa fa-print"></i></a>';
 			}
 
-			if(in_array('updateOrder', $this->permission) && $value['paid_status'] == 2 ) {
+			if(in_array('updateOrder', $this->permission)) {
 				$buttons .= ' <a href="'.base_url('orders/update/'.$value['id']).'" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
 			}
 
@@ -71,15 +71,15 @@ class Orders extends Admin_Controller
 			else {
 				$paid_status = '<span class="label label-warning">Not Paid</span>';
 			}
-
+			$name = $customers_data['firstname'] .' '.$customers_data['lastname'];
+			$net_amount = "IDR ".number_format($value['net_amount'],2);
 			$result['data'][$key] = array(
 				$value['bill_no'],
-				$customers_data['firstname'],
-				$customers_data['lastname'],
+				$name,
 				$customers_data['phone'],
 				$order_date,
 				$count_total_item,
-				$value['net_amount'],
+				$net_amount,
 				$paid_status,
 				$buttons
 			);
@@ -310,7 +310,7 @@ class Orders extends Admin_Controller
 
 			$date_text = ($order_data['paid_status'] == 1) ? "Pay Date" : "Order Date";
 			$date_time = ($order_data['paid_status'] == 1) ? $order_data['paid_at'] : $order_data['ordered_at'];
-			$date = date('d M Y', $date_time);
+			$date = date('d M Y H:i', $date_time);
 			$paid_status = ($order_data['paid_status'] == 1) ? "Paid" : "Unpaid";
 			
 			$html = '<!-- Main content -->
@@ -388,18 +388,19 @@ class Orders extends Admin_Controller
 			          <tbody>'; 
 
 			          foreach ($orders_items as $k => $v) {
-						$promo_price = $v['rate'] - $v['product_discount'];
+						$promo = $v['rate'] - $v['product_discount'];
+						$promo_price = "IDR ".number_format($promo,2);
 
 
 			          	$product_data = $this->model_products->getProductData($v['product_id']); 
 			          	
 			          	$html .= '<tr>
 				            <td>'.$product_data['name'].'</td>
-				            <td>'.$v['rate'].'</td>
-				            <td>'.$v['product_discount'].'</td>
+				            <td>'."IDR ".number_format($v['rate'],2).'</td>
+				            <td>'."IDR ".number_format($v['product_discount'],2).'</td>
 				            <td>'.$promo_price.'</td>
 				            <td>'.$v['qty'].'</td>
-				            <td>'.$v['amount'].'</td>
+				            <td>'."IDR ".number_format($v['amount'],2).'</td>
 			          	</tr>';
 			          }
 			          
@@ -418,16 +419,16 @@ class Orders extends Admin_Controller
 			          <table class="table">
 			            <tr>
 			              <th style="width:50%">Gross Amount:</th>
-			              <td>'.$order_data['gross_amount'].'</td>
+			              <td>'."IDR ".number_format($order_data['gross_amount'],2).'</td>
 			            </tr>';
 			            
 			            $html .=' <tr>
 			              <th>Discount:</th>
-			              <td>'.$order_data['total_discount'].'</td>
+			              <td>'."IDR ".number_format($order_data['total_discount'],2).'</td>
 			            </tr>
 			            <tr>
 			              <th>Net Amount:</th>
-			              <td>'.$order_data['net_amount'].'</td>
+			              <td>'."IDR ".number_format($order_data['net_amount'],2).'</td>
 			            </tr>
 			            <tr>
 			              <th>Paid Status:</th>
