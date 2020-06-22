@@ -79,7 +79,7 @@
 .skin-black .wrapper,
 .skin-black .main-sidebar,
 .skin-black .left-side {
-  background-color: #222d32;
+  background-color: #3A3843;
 }
 .skin-black .user-panel > .info,
 .skin-black .user-panel > .info > a {
@@ -96,7 +96,7 @@
 .skin-black .sidebar-menu > li.active > a,
 .skin-black .sidebar-menu > li.menu-open > a {
   color: #ffffff;
-  background: #1e282c;
+  background: #2C2C2C;
 }
 .skin-black .sidebar-menu > li.active > a {
   border-left-color: #ffffff;
