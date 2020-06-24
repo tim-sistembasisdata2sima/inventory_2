@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 18, 2020 at 12:52 PM
+-- Generation Time: Jun 24, 2020 at 06:54 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.6
 
@@ -32,16 +32,6 @@ CREATE TABLE `attribute_value` (
   `value` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `attribute_value`
---
-
-INSERT INTO `attribute_value` (`id`, `value`) VALUES
-(4, 'Blue'),
-(5, 'Red'),
-(6, 'Pink'),
-(7, 'Yellow');
-
 -- --------------------------------------------------------
 
 --
@@ -54,15 +44,6 @@ CREATE TABLE `brands` (
   `active` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `brands`
---
-
-INSERT INTO `brands` (`id`, `name`, `active`) VALUES
-(1, 'XX1', 1),
-(2, 'XXY', 1),
-(3, 'XXz', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -74,13 +55,6 @@ CREATE TABLE `categories` (
   `name` varchar(255) NOT NULL,
   `active` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `categories`
---
-
-INSERT INTO `categories` (`id`, `name`, `active`) VALUES
-(1, 'Tas', 1);
 
 -- --------------------------------------------------------
 
@@ -102,7 +76,7 @@ CREATE TABLE `company` (
 --
 
 INSERT INTO `company` (`id`, `name`, `address`, `phone`, `country`, `currency`) VALUES
-(1, 'Ndo Stores', 'test', '812345678', 'Indonesia', 'IDR');
+(1, 'Ndo Collection', 'test', '812345678', 'Indonesia', 'IDR');
 
 -- --------------------------------------------------------
 
@@ -117,19 +91,6 @@ CREATE TABLE `customers` (
   `address` varchar(255) DEFAULT NULL,
   `phone` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `customers`
---
-
-INSERT INTO `customers` (`id`, `firstname`, `lastname`, `address`, `phone`) VALUES
-(1, 'Andi', 'Andi', 'kembang sari', '812537485'),
-(6, 'Adina', 'Adina', 'jalan rujak', '81727394'),
-(7, 'Adina', 'Adin', 'jalan rujak', '871738492'),
-(8, 'Rina', 'Rina', 'jalan mangga', '118379394'),
-(9, 'Tono', 'Tono', 'jalan pisang', '183728292'),
-(10, 'Tina', 'Tini', 'Jln semanggi blok a', '81279304'),
-(11, 'Tina', 'Tina', 'Ruko Asri Damai blok k no 5', '0812345678');
 
 -- --------------------------------------------------------
 
@@ -166,16 +127,9 @@ CREATE TABLE `orders` (
   `net_amount` int(11) NOT NULL,
   `total_discount` int(11) NOT NULL,
   `paid_status` int(11) NOT NULL,
-  `method` int(11) DEFAULT NULL,
+  `method` varchar(20) DEFAULT 'none',
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `bill_no`, `customer_id`, `ordered_at`, `paid_at`, `gross_amount`, `net_amount`, `total_discount`, `paid_status`, `method`, `user_id`) VALUES
-(1, 'BILPR-CBFD', 11, '1592421328', '1592421445', 12000000, 11850000, 150000, 1, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -189,15 +143,9 @@ CREATE TABLE `orders_item` (
   `product_id` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
   `rate` int(11) NOT NULL,
+  `product_discount` int(11) NOT NULL DEFAULT 0,
   `amount` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `orders_item`
---
-
-INSERT INTO `orders_item` (`id`, `order_id`, `product_id`, `qty`, `rate`, `amount`) VALUES
-(2, 1, 49, 10, 1200000, 12000000);
 
 -- --------------------------------------------------------
 
@@ -222,15 +170,6 @@ CREATE TABLE `products` (
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `products`
---
-
-INSERT INTO `products` (`id`, `name`, `sku`, `price`, `discount`, `qty`, `image`, `attribute_value`, `description`, `brand_id`, `category_id`, `availability`, `supplier_id`, `user_id`) VALUES
-(48, 'testtt', '121425436', 1221435, 0, -13, '<p>You did not select a file to upload.</p>', '[\"Blue\",\"Red\"]', '<p>test</p>', 1, 1, 1, 1, 2),
-(49, 'qwwerty', '12435465', 1200000, 1000, -21, '<p>You did not select a file to upload.</p>', '[\"Blue\",\"Red\",\"Pink\",\"Yellow\"]', '<p>test</p>', 1, 1, 1, 1, 2),
-(50, 'Channoul', '12356464', 2000000, 150000, 15, 'assets/images/product_image/5eea6fe948c41.jpg', '[\"Pink\",\"Yellow\"]', '<p>Test</p>', 2, 1, 1, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -244,14 +183,6 @@ CREATE TABLE `suppliers` (
   `phone` varchar(255) NOT NULL,
   `active` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `suppliers`
---
-
-INSERT INTO `suppliers` (`id`, `name`, `address`, `phone`, `active`) VALUES
-(1, 'ABC', 'test', '', 1),
-(2, 'BBc', 'test123', '123', 1);
 
 -- --------------------------------------------------------
 
@@ -393,19 +324,19 @@ ALTER TABLE `user_group`
 -- AUTO_INCREMENT for table `attribute_value`
 --
 ALTER TABLE `attribute_value`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `company`
@@ -417,7 +348,7 @@ ALTER TABLE `company`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `groups`
@@ -429,25 +360,25 @@ ALTER TABLE `groups`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `orders_item`
 --
 ALTER TABLE `orders_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
