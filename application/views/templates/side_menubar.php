@@ -65,7 +65,7 @@
           <?php if(in_array('createCategory', $user_permission) || in_array('updateCategory', $user_permission) || in_array('viewCategory', $user_permission) || in_array('deleteCategory', $user_permission)): ?>
             <li id="categoryNav">
               <a href="<?php echo base_url('category/') ?>">
-                <i class="fa fa-files-o"></i> <span>Category</span>
+                <i class="fa fa-cubes"></i> <span>Category</span>
               </a>
             </li>
           <?php endif; ?>
@@ -73,7 +73,7 @@
           <?php if(in_array('createAttribute', $user_permission) || in_array('updateAttribute', $user_permission) || in_array('viewAttribute', $user_permission) || in_array('deleteAttribute', $user_permission)): ?>
           <li id="attributeNav">
             <a href="<?php echo base_url('attributes/') ?>">
-              <i class="fa fa-files-o"></i> <span>Attributes</span>
+              <i class="fa fa-paint-brush"></i> <span>Attributes</span>
             </a>
           </li>
           <?php endif; ?>
@@ -81,7 +81,7 @@
           <?php if(in_array('createProduct', $user_permission) || in_array('updateProduct', $user_permission) || in_array('viewProduct', $user_permission) || in_array('deleteProduct', $user_permission)): ?>
             <li class="treeview" id="mainProductNav">
               <a href="#">
-                <i class="fa fa-cube"></i>
+                <i class="fa fa-shopping-bag"></i>
                 <span>Products</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
@@ -122,7 +122,7 @@
           <?php if(in_array('createCustomer', $user_permission) || in_array('updateCustomer', $user_permission) || in_array('viewCustomer', $user_permission) || in_array('deleteCustomer', $user_permission)): ?>
             <li id="customerNav">
               <a href="<?php echo base_url('customers/') ?>">
-                <i class="glyphicon glyphicon-tags"></i> <span>Customers</span>
+                <i class="fa fa-user-circle-o"></i> <span>Customers</span>
               </a>
             </li>
           <?php endif; ?>
@@ -130,7 +130,7 @@
           <?php if(in_array('createSupplier', $user_permission) || in_array('updateSupplier', $user_permission) || in_array('viewSupplier', $user_permission) || in_array('deleteSupplier', $user_permission)): ?>
             <li id="supplierNav">
               <a href="<?php echo base_url('suppliers/') ?>">
-                <i class="glyphicon glyphicon-tags"></i> <span>Suppliers</span>
+                <i class="fa fa-truck"></i> <span>Suppliers</span>
               </a>
             </li>
           <?php endif; ?>
@@ -145,7 +145,7 @@
 
 
           <?php if(in_array('updateCompany', $user_permission)): ?>
-            <li id="companyNav"><a href="<?php echo base_url('company/') ?>"><i class="fa fa-files-o"></i> <span>Company</span></a></li>
+            <li id="companyNav"><a href="<?php echo base_url('company/') ?>"><i class="glyphicon glyphicon-home"></i> <span>Company</span></a></li>
           <?php endif; ?>
 
         

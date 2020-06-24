@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Log in</title>
+  <title>Log in | Ndo Collection</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -30,10 +30,11 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" style="overflow:hidden;background: url(<?php echo base_url('assets/images/bg.jpg')?>) no-repeat center;">
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?php echo base_url('auth'); ?>"><b>Login</b></a>
+    <br>
+    <a href="<?php echo base_url('auth/login'); ?>"><img width="120" src="<?php echo base_url('assets/images/logo.png')?>" alt=""></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
