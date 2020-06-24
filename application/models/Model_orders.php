@@ -173,6 +173,7 @@ class Model_orders extends CI_Model
 	    			'product_id' => $this->input->post('product')[$x],
 	    			'qty' => $this->input->post('qty')[$x],
 	    			'rate' => $this->input->post('rate_value')[$x],
+	    			'product_discount' => $this->input->post('product_discount_value')[$x],
 	    			'amount' => $this->input->post('amount_value')[$x],
 	    		);
 	    		$this->db->insert('orders_item', $items);

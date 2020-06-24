@@ -57,7 +57,7 @@ class Orders extends Admin_Controller
 				$buttons .= '<a target="__blank" href="'.base_url('orders/printDiv/'.$value['id']).'" class="btn btn-default"><i class="fa fa-print"></i></a>';
 			}
 
-			if(in_array('updateOrder', $this->permission)) {
+			if(in_array('updateOrder', $this->permission) && $value['paid_status'] == 2) {
 				$buttons .= ' <a href="'.base_url('orders/update/'.$value['id']).'" class="btn btn-default"><i class="fa fa-pencil"></i></a>';
 			}
 
@@ -224,7 +224,7 @@ class Orders extends Admin_Controller
         	
         	if($update == true) {
         		$this->session->set_flashdata('success', 'Successfully updated');
-        		redirect('orders/update/'.$id, 'refresh');
+        		redirect('orders/', 'refresh');
         	}
         	else {
         		$this->session->set_flashdata('errors', 'Error occurred!!');
