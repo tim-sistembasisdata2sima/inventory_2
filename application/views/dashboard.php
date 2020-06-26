@@ -1,7 +1,7 @@
 
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="background-image: url('assets/images/ndo.jpg')">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
