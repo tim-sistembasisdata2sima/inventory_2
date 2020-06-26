@@ -26,4 +26,6 @@ Username: admin@ndostore.com
 Password: password
 6. Apabila berhasil, Anda akan memasuki halaman Dashboard Ndo Collection Inventory.
 
+Dan berikut ini merupakan link Youtube dari Presentasi UAS: https://youtu.be/Efmd2oRKNQw
+
 Terima Kasih
