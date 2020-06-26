@@ -1,0 +1,29 @@
+Inventory Application For Ndo Collection
+Kelompok 3 Sistem Basis Data
+Anggota :
+1. Arif Budiman 1931002
+2. Juliantio 1931006
+3. Elbert Sun 1931012
+4. Harley Fernando 1931014
+5. Tomy 1931066
+6. Steven Salim 1931144
+7. Kisusyenni Vennesa 1931150
+
+Penjelasan : aplikasi ini merupakan aplikasi inventory untuk toko tas bernama Ndo Collection.
+
+Database name : stockms_2
+Untuk memasuki aplikasi:
+Username: admin@ndostore.com
+Password: password
+
+Untuk membuka aplikasi tersebut diharapkan mengikuti petunjuk dibawah ini terlebih dahulu:
+1. Pada DBMS, buatlah database bernama 'stockms_2'
+2. Kemudian, import database 'stockms_2' yang terdapat pada folder 'Database'
+3. Kemudian menuju ke browser dan ketikkan 'localhost/ndo_inventory' untuk membuka aplikasi
+4. Apabila tidak bisa dibuka, pastikan nama database 'stockms_2' dan url base sudah tepat 'http://localhost/ndo_inventory/'. Apabila nama url base berbeda, dapat diganti melalui file config.php pada folder application/config/config.php; Apabila nama databse berbeda dapat diganti pada folder application/config/database.php
+5. Untuk memasuki aplikasi, ketikkan username dan password dibawah ini. 
+Username: admin@ndostore.com
+Password: password
+6. Apabila berhasil, Anda akan memasuki halaman Dashboard Ndo Collection Inventory.
+
+Terima Kasih
